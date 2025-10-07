@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --yellow: #FFD700;
+            --gold: #FFC107;
+            --light-yellow: #FFF9C4;
+            --gray: #6C757D;
+            --success: #28A745;
+        }
+        
+        body { 
+            padding-top: 80px; 
+            background: var(--dark-gray);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: var(--black) !important;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--yellow);
+        }
+        
+        .navbar-brand { 
+            font-weight: 800; 
+            font-size: 1.8rem;
+            color: var(--yellow) !important;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--yellow) !important;
+        }
+        
+        /* E-commerce Product Cards */
+        .product-card {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            border: 2px solid #333;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 25px;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--yellow);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+        }
+        
+        .product-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-category {
+            background: #333;
+            color: var(--yellow);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-title {
+            color: var(--yellow);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .product-description {
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            color: var(--yellow);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-warning {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-success {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+        
+        .category-btn {
+            background: #333;
+            border: 2px solid #555;
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
+        }
+        
+        /* Admin Stats */
+        .admin-stats {
+            background: var(--dark-gray);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border: 2px solid #333;
+            text-align: center;
+        }
+        
+        .admin-stats h3 {
+            color: var(--yellow);
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+        
+        .admin-stats i {
+            color: var(--yellow);
+        }
+        
+        /* Form Controls */
+        .form-control {
+            background: #2A2A2A;
+            border: 2px solid #444;
+            color: white;
+        }
+        
+        .form-control:focus {
+            background: #2A2A2A;
+            border-color: var(--yellow);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+        
+        .form-label {
+            color: var(--yellow);
+            font-weight: 600;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--dark-gray);
+            border: 2px solid #333;
+            color: white;
+        }
+        
+        .card-header {
+            background: #333 !important;
+            border-bottom: 1px solid #444;
+            color: var(--yellow);
+        }
+        
+        /* Text Colors */
+        .text-primary {
+            color: var(--yellow) !important;
+        }
+        
+        .text-muted {
+            color: #888 !important;
+        }
+        
+        /* Modal */
+        .modal-content {
+            background: var(--dark-gray);
+            color: white;
+            border: 2px solid var(--yellow);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #444;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #444;
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        /* Page Sections */
+        #loginPage, #mainApp { display: none; }
+        
+        /* Toast Notifications */
+        .toast {
+            background: var(--yellow);
+            color: var(--black);
+            border-radius: 10px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+
+        /* Food Availability Toggle */
+        .availability-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        /* Image Preview */
+        .image-preview-container {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-crown me-2"></i>KainMami Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showPage('home')">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('orders')">
+                            <i class="fas fa-receipt me-1"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('menu')">
+                            <i class="fas fa-utensils me-1"></i> Menu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('account')">
+                            <i class="fas fa-user me-1"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="container">
+        <div class="row justify-content-center" style="margin-top: 100px;">
+            <div class="col-md-5">
+                <div class="card shadow-lg border-secondary">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-crown fa-3x text-warning mb-3"></i>
+                            <h3 class="fw-bold text-warning">Admin Portal</h3>
+                            <p class="text-muted">KainMami Management System</p>
+                        </div>
+                        
+                        <form id="loginForm">
+                            <h5 class="mb-4 text-center text-warning">Admin Login</h5>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="loginUsername" required placeholder="Enter admin username">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Password</label>
+                                <input type="password" class="form-control form-control-lg" id="loginPassword" required placeholder="Enter admin password">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">Login to Admin Panel</button>
+                        </form>
+                        <div class="text-center">
+                            <small class="text-muted">Note: Only admin accounts can access this panel</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="container">
+        <!-- Dashboard Page -->
+        <div id="homePage" class="page">
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h5 class="fw-bold mb-4 text-warning">Quick Actions</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <button class="btn btn-primary w-100 btn-lg" onclick="showAddFoodModal()">
+                            <i class="fas fa-plus me-2"></i> Add New Product
+                        </button>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <button class="btn btn-success w-100 btn-lg" onclick="showPage('menu')">
+                            <i class="fas fa-edit me-2"></i> Manage Products
+                        </button>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <button class="btn btn-warning w-100 btn-lg" onclick="showPage('orders')">
+                            <i class="fas fa-receipt me-2"></i> View Orders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-receipt fa-2x mb-2"></i>
+                        <h3 id="totalOrders">0</h3>
+                        <p class="text-muted">Total Orders</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-utensils fa-2x mb-2"></i>
+                        <h3 id="totalFoods">0</h3>
+                        <p class="text-muted">Menu Items</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-clock fa-2x mb-2"></i>
+                        <h3 id="pendingOrders">0</h3>
+                        <p class="text-muted">Pending Orders</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                        <h3 id="completedOrders">0</h3>
+                        <p class="text-muted">Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Preview -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-utensils me-2"></i> Menu Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="category-filter text-center">
+                        <h5 class="fw-bold mb-4 text-warning">Browse Categories</h5>
+                        <div>
+                            <button class="btn category-btn active" onclick="filterCategory('', this)">All Items</button>
+                            <button class="btn category-btn" onclick="filterCategory('Breakfast', this)">🍳 Breakfast</button>
+                            <button class="btn category-btn" onclick="filterCategory('Lunch', this)">🍔 Lunch</button>
+                            <button class="btn category-btn" onclick="filterCategory('Snacks', this)">🍟 Snacks</button>
+                            <button class="btn category-btn" onclick="filterCategory('Dinner', this)">🍝 Dinner</button>
+                            <button class="btn category-btn" onclick="filterCategory('Dessert', this)">🍰 Dessert</button>
+                        </div>
+                    </div>
+                    <div id="foodsPreview" class="row"></div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-history me-2"></i> Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div id="recentOrders"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Page -->
+        <div id="ordersPage" class="page" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-warning"><i class="fas fa-receipt me-2"></i> Manage Orders</h2>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+
+        <!-- Menu Management Page -->
+        <div id="menuPage" class="page" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-warning"><i class="fas fa-utensils me-2"></i> Menu Management</h2>
+                <button class="btn btn-success btn-lg" onclick="showAddFoodModal()">
+                    <i class="fas fa-plus me-2"></i> Add New Product
+                </button>
+            </div>
+            
+            <div class="category-filter text-center mb-4">
+                <h5 class="fw-bold mb-4 text-warning">Filter by Category</h5>
+                <div>
+                    <button class="btn category-btn active" onclick="filterMenuCategory('', this)">All Items</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Breakfast', this)">🍳 Breakfast</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Lunch', this)">🍔 Lunch</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Snacks', this)">🍟 Snacks</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Dinner', this)">🍝 Dinner</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Dessert', this)">🍰 Dessert</button>
+                </div>
+            </div>
+            
+            <div id="menuList" class="row"></div>
+        </div>
+
+        <!-- Account Page -->
+        <div id="accountPage" class="page" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-warning"><i class="fas fa-user-circle me-2"></i> Account Settings</h2>
+                <div>
+                    <button class="btn btn-primary me-2" onclick="showAddFoodModal()">
+                        <i class="fas fa-plus me-1"></i> Add Product
+                    </button>
+                    <button class="btn btn-danger" onclick="showDeleteProductModal()">
+                        <i class="fas fa-trash me-1"></i> Delete Product
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body p-4">
+                            <form id="accountForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control" id="accountUsername" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Full Name</label>
+                                    <input type="text" class="form-control" id="accountName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="tel" class="form-control" id="accountPhone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">New Password (leave blank to keep current)</label>
+                                    <input type="password" class="form-control" id="accountPassword" placeholder="Enter new password">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 btn-lg">
+                                    <i class="fas fa-save me-2"></i> Update Account
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-warning mb-4">Product Management</h5>
+                            <div class="d-grid gap-3">
+                                <button class="btn btn-success btn-lg" onclick="showAddFoodModal()">
+                                    <i class="fas fa-plus-circle me-2"></i> Add New Product
+                                </button>
+                                <button class="btn btn-warning btn-lg" onclick="showPage('menu')">
+                                    <i class="fas fa-edit me-2"></i> Edit Products
+                                </button>
+                                <button class="btn btn-danger btn-lg" onclick="showDeleteProductModal()">
+                                    <i class="fas fa-trash-alt me-2"></i> Delete Products
+                                </button>
+                                <button class="btn btn-info btn-lg" onclick="initializeSampleFoods()">
+                                    <i class="fas fa-database me-2"></i> Load Sample Foods
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Modal -->
+    <div class="modal fade" id="foodModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Add/Edit Food Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="foodForm">
+                        <input type="hidden" id="foodId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="foodName" required placeholder="Enter product name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" id="foodCategory" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Breakfast">Breakfast</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="Snacks">Snacks</option>
+                                        <option value="Dinner">Dinner</option>
+                                        <option value="Dessert">Dessert</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Price</label>
+                                    <input type="number" step="0.01" class="form-control" id="foodPrice" required placeholder="Enter price">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Image URL</label>
+                                    <input type="text" class="form-control" id="foodImage" placeholder="https://i.imgur.com/abc123.jpg" oninput="previewImage(this.value)">
+                                    
+                                    <!-- Image Preview -->
+                                    <div id="imagePreview" class="mt-2 text-center image-preview-container" style="display: none;">
+                                        <img id="previewImage" src="" class="img-fluid rounded border" style="max-height: 150px; max-width: 200px;">
+                                        <div class="mt-1">
+                                            <small class="text-success" id="imageStatus">✓ Image loaded successfully</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <strong>How to get image URL:</strong>
+                                        <ol class="small mb-0 mt-1">
+                                            <li>Go to <a href="https://imgur.com" target="_blank" class="text-warning">Imgur.com</a></li>
+                                            <li>Upload your image (drag & drop)</li>
+                                            <li>Right-click the image → <strong>"Copy image address"</strong></li>
+                                            <li>Paste here - should look like: <code>https://i.imgur.com/abc123.jpg</code></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" id="foodDescription" rows="4" placeholder="Enter product description"></textarea>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="foodAvailable" checked>
+                                    <label class="form-check-label">Available for ordering</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Save Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Product Modal -->
+    <div class="modal fade" id="deleteProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Delete Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Product to Delete</label>
+                        <select class="form-control" id="deleteFoodSelect">
+                            <option value="">Select a product...</option>
+                        </select>
+                    </div>
+                    <div id="deleteProductPreview" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteSelectedFood()">Delete Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = '/api';
+        let token = null;
+        let currentCategory = '';
+        let foodModal;
+        let deleteProductModal;
+
+        // Sample foods data
+        const sampleFoods = [
+            // Breakfast (3 items)
+            {
+                name: "Classic Pancakes",
+                category: "Breakfast",
+                price: 120.00,
+                image_url: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop",
+                description: "Fluffy buttermilk pancakes served with maple syrup and butter"
+            },
+            {
+                name: "Bacon & Eggs",
+                category: "Breakfast", 
+                price: 150.00,
+                image_url: "https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?w=400&h=300&fit=crop",
+                description: "Crispy bacon with sunny-side-up eggs and toast"
+            },
+            {
+                name: "Breakfast Burrito",
+                category: "Breakfast",
+                price: 130.00,
+                image_url: "https://images.unsplash.com/photo-1626700051175-6818013e1bd4?w=400&h=300&fit=crop",
+                description: "Scrambled eggs, cheese, and sausage wrapped in a warm tortilla"
+            },
+            // Lunch (3 items)
+            {
+                name: "Classic Burger",
+                category: "Lunch",
+                price: 180.00,
+                image_url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop",
+                description: "Beef patty with lettuce, tomato, cheese, and special sauce"
+            },
+            {
+                name: "Chicken Caesar Salad",
+                category: "Lunch",
+                price: 160.00,
+                image_url: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
+                description: "Fresh romaine lettuce with grilled chicken and Caesar dressing"
+            },
+            {
+                name: "Margherita Pizza",
+                category: "Lunch",
+                price: 220.00,
+                image_url: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&h=300&fit=crop",
+                description: "Classic pizza with tomato sauce, mozzarella, and fresh basil"
+            },
+            // Snacks (3 items)
+            {
+                name: "French Fries",
+                category: "Snacks",
+                price: 80.00,
+                image_url: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop",
+                description: "Crispy golden fries served with ketchup"
+            },
+            {
+                name: "Chicken Wings",
+                category: "Snacks",
+                price: 140.00,
+                image_url: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=300&fit=crop",
+                description: "Spicy buffalo wings with blue cheese dip"
+            },
+            {
+                name: "Mozzarella Sticks",
+                category: "Snacks",
+                price: 100.00,
+                image_url: "https://images.unsplash.com/photo-1531749668029-2db88e4276c7?w=400&h=300&fit=crop",
+                description: "Breaded mozzarella sticks with marinara sauce"
+            },
+            // Dinner (3 items)
+            {
+                name: "Grilled Salmon",
+                category: "Dinner",
+                price: 280.00,
+                image_url: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop",
+                description: "Fresh salmon fillet with lemon butter sauce and vegetables"
+            },
+            {
+                name: "Beef Steak",
+                category: "Dinner",
+                price: 350.00,
+                image_url: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop",
+                description: "Tender beef steak with mashed potatoes and gravy"
+            },
+            {
+                name: "Pasta Carbonara",
+                category: "Dinner",
+                price: 190.00,
+                image_url: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=300&fit=crop",
+                description: "Creamy pasta with bacon, eggs, and parmesan cheese"
+            },
+            // Dessert (3 items)
+            {
+                name: "Chocolate Cake",
+                category: "Dessert",
+                price: 120.00,
+                image_url: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop",
+                description: "Rich chocolate cake with chocolate frosting"
+            },
+            {
+                name: "Ice Cream Sundae",
+                category: "Dessert",
+                price: 90.00,
+                image_url: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop",
+                description: "Vanilla ice cream with chocolate sauce and sprinkles"
+            },
+            {
+                name: "Cheesecake",
+                category: "Dessert",
+                price: 140.00,
+                image_url: "https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=300&fit=crop",
+                description: "Creamy New York style cheesecake with berry compote"
+            }
+        ];
+
+        // ============ IMAGE PREVIEW FUNCTIONALITY ============
+        function previewImage(imageUrl) {
+            const previewContainer = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const imageStatus = document.getElementById('imageStatus');
+            
+            if (!imageUrl.trim()) {
+                previewContainer.style.display = 'none';
+                return;
+            }
+            
+            // Show loading state
+            previewContainer.style.display = 'block';
+            previewImage.src = '';
+            imageStatus.textContent = '🔄 Loading image...';
+            imageStatus.className = 'text-warning';
+            
+            // Test if image loads successfully
+            const img = new Image();
+            img.onload = function() {
+                previewImage.src = imageUrl;
+                imageStatus.textContent = '✅ Image loaded successfully';
+                imageStatus.className = 'text-success';
+            };
+            img.onerror = function() {
+                previewImage.src = '';
+                imageStatus.textContent = '❌ Image failed to load. Check URL format.';
+                imageStatus.className = 'text-danger';
+            };
+            img.src = imageUrl;
+        }
+
+        // ============ AUTHENTICATION ============
+        window.addEventListener('DOMContentLoaded', () => {
+            token = localStorage.getItem('adminToken');
+            foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+            deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
+            
+            if (token) {
+                document.getElementById('mainApp').style.display = 'block';
+                loadDashboard();
+            } else {
+                document.getElementById('loginPage').style.display = 'block';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                
+                if (res.ok && data.user.role === 'admin') {
+                    token = data.token;
+                    localStorage.setItem('adminToken', token);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    loadDashboard();
+                    showToast('Admin login successful!', 'success');
+                } else {
+                    showToast('Admin access required. Please use an admin account.', 'error');
+                }
+            } catch (err) {
+                showToast('Login failed: ' + err.message, 'error');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            token = null;
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            showToast('Logged out successfully', 'success');
+        }
+
+        // ============ PAGE NAVIGATION ============
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page + 'Page').style.display = 'block';
+
+            if (page === 'home') loadDashboard();
+            else if (page === 'orders') loadOrders();
+            else if (page === 'menu') loadMenu();
+            else if (page === 'account') loadAccount();
+        }
+
+        // ============ DASHBOARD ============
+        async function loadDashboard() {
+            try {
+                const ordersRes = await fetch(`${API_BASE}/orders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const orders = await ordersRes.json();
+
+                const foodsRes = await fetch(`${API_BASE}/foods`);
+                const foods = await foodsRes.json();
+
+                document.getElementById('totalOrders').textContent = orders.length;
+                document.getElementById('totalFoods').textContent = foods.length;
+                document.getElementById('pendingOrders').textContent = orders.filter(o => o.status === 'in_process').length;
+                document.getElementById('completedOrders').textContent = orders.filter(o => o.status === 'delivered').length;
+
+                await loadFoodPreview();
+
+                const recentOrders = orders.slice(-5).reverse();
+                const recentHtml = recentOrders.map(o => `
+                    <div class="card product-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold">Order #${o.id} - ${o.user_name}</h6>
+                                    <small class="text-muted">${o.created_at}</small>
+                                </div>
+                                <span class="badge ${o.status === 'delivered' ? 'bg-success' : o.status === 'ready' ? 'bg-info' : 'bg-warning'}">
+                                    ${o.status.toUpperCase().replace('_', ' ')}
+                                </span>
+                            </div>
+                            <p class="mb-1"><strong>Items:</strong> ${o.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                            <h6 class="text-warning fw-bold mb-0">Total: ₱${o.total_price.toFixed(2)}</h6>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('recentOrders').innerHTML = recentHtml || '<p class="text-muted">No recent orders</p>';
+
+            } catch (err) {
+                showToast('Failed to load dashboard', 'error');
+            }
+        }
+
+        async function loadFoodPreview() {
+            const url = `${API_BASE}/foods?category=${currentCategory}`;
+            const res = await fetch(url);
+            const foods = await res.json();
+
+            const previewFoods = foods.slice(0, 8);
+
+            const html = previewFoods.map(f => `
+                <div class="col-md-6 col-lg-3">
+                    <div class="product-card">
+                        <img src="${f.image_url}" class="product-image" alt="${f.name}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                        <div class="product-content">
+                            <div class="product-category">${f.category}</div>
+                            <h3 class="product-title">${f.name}</h3>
+                            <p class="product-description">${f.description}</p>
+                            <div class="product-price">₱${f.price.toFixed(2)}</div>
+                            <div class="mb-2">
+                                <span class="badge availability-badge ${f.is_available ? 'bg-success' : 'bg-danger'}">
+                                    ${f.is_available ? 'Available' : 'Unavailable'}
+                                </span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-warning btn-sm" onclick="editFood(${f.id})">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteFood(${f.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('foodsPreview').innerHTML = html || `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No food items found</h4>
+                    <button class="btn btn-primary mt-3" onclick="initializeSampleFoods()">
+                        <i class="fas fa-database me-2"></i> Load Sample Foods
+                    </button>
+                </div>
+            `;
+        }
+
+        function filterCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            loadFoodPreview();
+        }
+
+        // ============ MENU MANAGEMENT ============
+        function filterMenuCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            loadMenu();
+        }
+
+        async function loadMenu() {
+            try {
+                const res = await fetch(`${API_BASE}/foods`);
+                const foods = await res.json();
+
+                let filteredFoods = foods;
+                if (currentCategory) {
+                    filteredFoods = foods.filter(f => f.category === currentCategory);
+                }
+
+                if (filteredFoods.length === 0) {
+                    document.getElementById('menuList').innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No food items found</h4>
+                            <p class="text-muted mb-4">Add your first food item to get started!</p>
+                            <button class="btn btn-primary btn-lg" onclick="showAddFoodModal()">
+                                <i class="fas fa-plus me-2"></i> Add New Product
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const html = filteredFoods.map(f => `
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="product-card">
+                            <img src="${f.image_url}" class="product-image" alt="${f.name}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                            <div class="product-content">
+                                <div class="product-category">${f.category}</div>
+                                <h3 class="product-title">${f.name}</h3>
+                                <p class="product-description">${f.description}</p>
+                                <div class="product-price">₱${f.price.toFixed(2)}</div>
+                                <div class="mb-2">
+                                    <span class="badge availability-badge ${f.is_available ? 'bg-success' : 'bg-danger'}">
+                                        ${f.is_available ? 'Available' : 'Unavailable'}
+                                    </span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-warning btn-sm" onclick="editFood(${f.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteFood(${f.id})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    <button class="btn ${f.is_available ? 'btn-secondary' : 'btn-success'} btn-sm" onclick="toggleFoodAvailability(${f.id}, ${!f.is_available})">
+                                        <i class="fas ${f.is_available ? 'fa-eye-slash' : 'fa-eye'}"></i> ${f.is_available ? 'Hide' : 'Show'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('menuList').innerHTML = html;
+            } catch (err) {
+                showToast('Failed to load menu', 'error');
+            }
+        }
+
+        // ============ FOOD MODAL FUNCTIONS ============
+        function showAddFoodModal() {
+            document.getElementById('foodForm').reset();
+            document.getElementById('foodId').value = '';
+            document.getElementById('foodAvailable').checked = true;
+            document.getElementById('imagePreview').style.display = 'none';
+            foodModal.show();
+        }
+
+        async function editFood(id) {
+            try {
+                const res = await fetch(`${API_BASE}/foods/${id}`);
+                const food = await res.json();
+
+                document.getElementById('foodId').value = food.id;
+                document.getElementById('foodName').value = food.name;
+                document.getElementById('foodCategory').value = food.category;
+                document.getElementById('foodPrice').value = food.price;
+                document.getElementById('foodImage').value = food.image_url;
+                document.getElementById('foodDescription').value = food.description;
+                document.getElementById('foodAvailable').checked = food.is_available;
+
+                // Show preview if image exists
+                if (food.image_url) {
+                    previewImage(food.image_url);
+                } else {
+                    document.getElementById('imagePreview').style.display = 'none';
+                }
+
+                foodModal.show();
+            } catch (err) {
+                showToast('Failed to load food details', 'error');
+            }
+        }
+
+        document.getElementById('foodForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const foodId = document.getElementById('foodId').value;
+            const foodData = {
+                name: document.getElementById('foodName').value,
+                category: document.getElementById('foodCategory').value,
+                price: parseFloat(document.getElementById('foodPrice').value),
+                image_url: document.getElementById('foodImage').value,
+                description: document.getElementById('foodDescription').value,
+                is_available: document.getElementById('foodAvailable').checked
+            };
+
+            const method = foodId ? 'PUT' : 'POST';
+            const url = foodId ? `${API_BASE}/foods/${foodId}` : `${API_BASE}/foods`;
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(foodData)
+                });
+
+                if (res.ok) {
+                    foodModal.hide();
+                    showToast(`Food ${foodId ? 'updated' : 'added'} successfully!`, 'success');
+                    loadMenu();
+                    loadDashboard();
+                } else {
+                    showToast('Failed to save food', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to save food', 'error');
+            }
+        });
+
+        // ============ FOOD ACTIONS ============
+        async function deleteFood(id) {
+            if (!confirm('Are you sure you want to delete this food item?')) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/foods/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    showToast('Food item deleted!', 'success');
+                    loadMenu();
+                    loadDashboard();
+                } else {
+                    showToast('Failed to delete food', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to delete food', 'error');
+            }
+        }
+
+        async function toggleFoodAvailability(foodId, newStatus) {
+            try {
+                const res = await fetch(`${API_BASE}/foods/${foodId}/availability`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ is_available: newStatus })
+                });
+
+                if (res.ok) {
+                    showToast(`Food ${newStatus ? 'made available' : 'made unavailable'}!`, 'success');
+                    loadMenu();
+                    loadDashboard();
+                } else {
+                    showToast('Failed to update food availability', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to update food availability', 'error');
+            }
+        }
+
+        // ============ DELETE PRODUCT MODAL ============
+        async function showDeleteProductModal() {
+            try {
+                const res = await fetch(`${API_BASE}/foods`);
+                const foods = await res.json();
+
+                const select = document.getElementById('deleteFoodSelect');
+                select.innerHTML = '<option value="">Select a product...</option>';
+                
+                foods.forEach(food => {
+                    const option = document.createElement('option');
+                    option.value = food.id;
+                    option.textContent = `${food.name} - ₱${food.price.toFixed(2)} (${food.category})`;
+                    select.appendChild(option);
+                });
+
+                select.addEventListener('change', function() {
+                    const selectedFood = foods.find(f => f.id == this.value);
+                    if (selectedFood) {
+                        document.getElementById('deleteProductPreview').innerHTML = `
+                            <div class="card product-card">
+                                <div class="card-body text-center">
+                                    <img src="${selectedFood.image_url}" class="img-fluid rounded mb-2" style="height: 100px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100?text=No+Image'">
+                                    <h6 class="fw-bold">${selectedFood.name}</h6>
+                                    <p class="text-muted mb-1">${selectedFood.category}</p>
+                                    <p class="text-warning fw-bold">₱${selectedFood.price.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById('deleteProductPreview').innerHTML = '';
+                    }
+                });
+
+                deleteProductModal.show();
+            } catch (err) {
+                showToast('Failed to load products for deletion', 'error');
+            }
+        }
+
+        async function deleteSelectedFood() {
+            const foodId = document.getElementById('deleteFoodSelect').value;
+            if (!foodId) {
+                showToast('Please select a product to delete', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/foods/${foodId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    showToast('Product deleted successfully!', 'success');
+                    deleteProductModal.hide();
+                    loadMenu();
+                    loadDashboard();
+                } else {
+                    showToast('Failed to delete product', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to delete product', 'error');
+            }
+        }
+
+        // ============ SAMPLE FOODS ============
+        async function initializeSampleFoods() {
+            if (!confirm('This will add 15 sample food items. Continue?')) return;
+
+            try {
+                for (const food of sampleFoods) {
+                    await fetch(`${API_BASE}/foods`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(food)
+                    });
+                }
+                showToast('15 sample food items added successfully!', 'success');
+                loadMenu();
+                loadDashboard();
+            } catch (err) {
+                showToast('Failed to add sample foods', 'error');
+            }
+        }
+
+        // ============ ORDERS ============
+        async function loadOrders() {
+            try {
+                const res = await fetch(`${API_BASE}/orders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const orders = await res.json();
+
+                if (orders.length === 0) {
+                    document.getElementById('ordersList').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-receipt fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No orders yet</h4>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const html = orders.reverse().map(o => `
+                    <div class="card product-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Order #${o.id} - ${o.user_name}</h5>
+                                    <small class="text-muted">${o.created_at}</small>
+                                </div>
+                                <span class="badge ${o.status === 'delivered' ? 'bg-success' : o.status === 'ready' ? 'bg-info' : 'bg-warning'}">
+                                    ${o.status.toUpperCase().replace('_', ' ')}
+                                </span>
+                            </div>
+                            <p><strong>Items:</strong> ${o.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                            <h5 class="text-warning fw-bold">Total: ₱${o.total_price.toFixed(2)}</h5>
+                            <div class="mt-3">
+                                <button class="btn btn-warning btn-sm" onclick="updateOrderStatus(${o.id}, 'in_process')">In Process</button>
+                                <button class="btn btn-info btn-sm" onclick="updateOrderStatus(${o.id}, 'ready')">Ready</button>
+                                <button class="btn btn-success btn-sm" onclick="updateOrderStatus(${o.id}, 'delivered')">Delivered</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('ordersList').innerHTML = html;
+            } catch (err) {
+                showToast('Failed to load orders', 'error');
+            }
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            try {
+                const res = await fetch(`${API_BASE}/orders/${orderId}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                if (res.ok) {
+                    showToast('Order status updated!', 'success');
+                    loadOrders();
+                    loadDashboard();
+                } else {
+                    showToast('Failed to update order', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to update order', 'error');
+            }
+        }
+
+        // ============ ACCOUNT ============
+        async function loadAccount() {
+            try {
+                const res = await fetch(`${API_BASE}/account`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const user = await res.json();
+
+                document.getElementById('accountUsername').value = user.username;
+                document.getElementById('accountName').value = user.name;
+                document.getElementById('accountPhone').value = user.phone;
+            } catch (err) {
+                showToast('Failed to load account', 'error');
+            }
+        }
+
+        document.getElementById('accountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const accountData = {
+                name: document.getElementById('accountName').value,
+                phone: document.getElementById('accountPhone').value
+            };
+
+            const password = document.getElementById('accountPassword').value;
+            if (password) {
+                accountData.password = password;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/account`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(accountData)
+                });
+
+                if (res.ok) {
+                    showToast('Account updated successfully', 'success');
+                    document.getElementById('accountPassword').value = '';
+                } else {
+                    showToast('Update failed', 'error');
+                }
+            } catch (err) {
+                showToast('Update failed', 'error');
+            }
+        });
+
+        // ============ TOAST NOTIFICATIONS ============
+        function showToast(message, type) {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'warning' : 'danger'} border-0 position-fixed bottom-0 end-0 m-3" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body" style="color: black;">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', toastHtml);
+            const toastEl = document.querySelector('.toast:last-child');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            setTimeout(() => toastEl.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
