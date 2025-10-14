@@ -1,0 +1,2819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Order Food Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --yellow: #FFD700;
+            --gold: #FFC107;
+            --light-yellow: #FFF9C4;
+            --gray: #6C757D;
+            --success: #28A745;
+        }
+        
+        body { 
+            padding-top: 80px; 
+            background: var(--dark-gray);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: var(--black) !important;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--yellow);
+        }
+
+        .navbar-brand { 
+            font-weight: 800; 
+            font-size: 1.8rem;
+            color: var(--yellow) !important;
+        }
+
+        .nav-link {
+            color: #cccccc !important; 
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--yellow) !important;
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: var(--yellow) !important;
+            background: rgba(255, 215, 0, 0.15);
+            font-weight: 600;
+        }
+
+        /* REMOVED YELLOW DOT */
+        .nav-link.active::after {
+            display: none;
+        }
+
+        .cart-badge { 
+            position: absolute; 
+            top: -8px; 
+            right: -8px; 
+            background: var(--yellow);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover .cart-badge {
+            transform: scale(1.1);
+        }
+        
+        /* Page Headers */
+        .page-header {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--yellow);
+        }
+        
+        .page-header h2 {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        /* E-commerce Product Cards */
+        .product-card {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            border: 2px solid #333;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 25px;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--yellow);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+        }
+        
+        .product-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-category {
+            background: #333;
+            color: var(--yellow);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-title {
+            color: var(--yellow);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .product-description {
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            color: var(--yellow);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .product-rating {
+            color: var(--yellow);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-add-cart {
+            background: var(--yellow);
+            border: none;
+            color: var(--black);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .btn-add-cart:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+        
+        .btn-view-details {
+            background: transparent;
+            border: 2px solid var(--yellow);
+            color: var(--yellow);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view-details:hover {
+            background: var(--yellow);
+            color: var(--black);
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+        
+        .category-btn {
+            background: #333;
+            border: 2px solid #555;
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
+        }
+        
+        /* Search Bar */
+        .search-container {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+        
+        .search-input {
+            background: #2A2A2A;
+            border: 2px solid #444;
+            color: white;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            background: #2A2A2A;
+            border-color: var(--yellow);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+        
+        .search-input::placeholder {
+            color: #888;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--black) 0%, #333 100%);
+            color: var(--yellow);
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            border-bottom: 3px solid var(--yellow);
+        }
+        
+        /* Form Controls */
+        .form-control {
+            background: #2A2A2A;
+            border: 2px solid #444;
+            color: white;
+        }
+        
+        .form-control:focus {
+            background: #2A2A2A;
+            border-color: var(--yellow);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+        
+        .form-label {
+            color: var(--yellow);
+            font-weight: 600;
+        }
+        
+        /* Password Input Group */
+        .password-input-group {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--yellow);
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--dark-gray);
+            border: 2px solid #333;
+            color: white;
+        }
+        
+        .card-header {
+            background: #333 !important;
+            border-bottom: 1px solid #444;
+            color: var(--yellow);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-success {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        /* Text Colors */
+        .text-primary {
+            color: var(--yellow) !important;
+        }
+        
+        .text-muted {
+            color: #888 !important;
+        }
+        
+        /* Input Group */
+        .input-group-text {
+            background: #333;
+            border: 2px solid #444;
+            color: var(--yellow);
+        }
+        
+        /* Page Sections */
+        #loginPage, #mainApp { display: none; }
+        
+        /* Toast Notifications - FIXED COLORS */
+        .toast {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            color: white !important;
+        }
+
+        .toast-error {
+            background: linear-gradient(135deg, #dc3545, #e83e8c) !important;
+            color: white !important;
+        }
+
+        .toast-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+            color: black !important;
+        }
+
+        .toast-info {
+            background: linear-gradient(135deg, #17a2b8, #20c997) !important;
+            color: white !important;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Checkout Styles */
+        .checkout-section {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .payment-option {
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .payment-option.selected {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .payment-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .payment-option.disabled:hover {
+            border-color: #444;
+            background: transparent;
+        }
+
+        .order-type-option {
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .order-type-option:hover {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .order-type-option.selected {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .order-type-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .order-type-option.disabled:hover {
+            border-color: #444;
+            background: transparent;
+        }
+
+        .qr-code {
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .file-upload-container {
+            border: 2px dashed #555;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .file-upload-container.required {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .file-upload-container.required:hover {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .upload-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            display: none;
+            position: relative;
+        }
+
+        .upload-preview-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Order Status */
+        .order-status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-waiting { background: #6c757d; color: white; }
+        .status-process { background: #ffc107; color: black; }
+        .status-ready { background: #17a2b8; color: white; }
+        .status-delivered { background: #28a745; color: white; }
+
+        /* System Closed Overlay */
+        .system-closed-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            color: white;
+            text-align: center;
+        }
+
+        .system-closed-content {
+            background: var(--dark-gray);
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid var(--yellow);
+            max-width: 500px;
+        }
+
+        /* Delivery Info */
+        .delivery-info {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--yellow);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        /* Notification System */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: rgb(0, 0, 0);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-item {
+            border-left: 4px solid var(--yellow);
+            padding-left: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 215, 0, 0.1); /* Lighter background */
+            padding: 15px;
+            border-radius: 8px;
+            color: rgb(0, 0, 0) !important; /* Ensure text is white */
+            border: 1px solid rgba(255, 215, 0, 0.3); /* Add border for better visibility */
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #0c0000 !important; /* Lighter color for better visibility */
+        }
+
+        /* Client Ready Notification */
+        .client-ready-notification {
+            background: rgba(40, 167, 69, 0.15); /* Lighter background */
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: white !important;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        /* Notification Modal Content */
+        #notificationContent {
+            color: white !important;
+        }
+
+        #notificationContent p {
+            color: white !important;
+            margin-bottom: 0;
+        }
+
+        /* Order Details */
+        .order-details-card {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        /* Proof of Payment Image */
+        .proof-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 2px solid var(--yellow);
+        }
+
+        /* Freedom Wall Styles */
+        .freedom-wall-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        .sticky-note-btn {
+            background: var(--yellow);
+            color: var(--black);
+            border: none;
+            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transform: rotate(-4deg);
+            transition: all 0.4s ease;
+        }
+
+        .sticky-note-btn small {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .sticky-note-btn:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+        }
+
+        .freedom-wall {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--yellow);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1100;
+            border: 3px solid var(--black);
+        }
+
+        .freedom-wall.active {
+            display: flex;
+        }
+
+        .fw-header {
+            background: var(--black);
+            color: var(--yellow);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .fw-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #000000;
+        }
+
+        .fw-message {
+            background: var(--light-yellow);
+            color: black;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid var(--yellow);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .fw-form {
+            padding: 15px;
+            background: var(--black);
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .btn-add-cart,
+            .btn-view-details {
+                width: 100%;
+            }
+
+            .nav-link {
+                margin: 5px 0;
+                display: block;
+                text-align: center;
+            }
+            
+            .navbar-nav {
+                text-align: center;
+                width: 100%;
+            }
+
+            .freedom-wall {
+                width: 300px;
+                height: 400px;
+                right: 10px;
+                bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- System Closed Overlay -->
+    <div id="systemClosedOverlay" class="system-closed-overlay">
+        <div class="system-closed-content">
+            <i class="fas fa-store-slash fa-4x text-warning mb-3"></i>
+            <h2 class="text-warning mb-3">Ordering System Closed</h2>
+            <p class="mb-4">We're currently not accepting orders at the moment. Please check back later.</p>
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-utensils me-2"></i>KainMami
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showPage('home')">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="#" onclick="showPage('cart')">
+                            <i class="fas fa-shopping-cart me-1"></i> Cart
+                            <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="#" onclick="showPage('orders')">
+                            <i class="fas fa-receipt me-1"></i> Orders
+                            <span class="notification-badge" id="orderNotificationBadge" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('account')">
+                            <i class="fas fa-user me-1"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout()">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login/Register Page -->
+    <div id="loginPage" class="container">
+        <div class="row justify-content-center" style="margin-top: 100px;">
+            <div class="col-md-5">
+                <div class="card shadow-lg border-secondary">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-utensils fa-3x text-warning mb-3"></i>
+                            <h3 class="fw-bold text-warning">Welcome to KainMami</h3>
+                            <p class="text-muted">Your favorite meals, delivered fast!</p>
+                        </div>
+                        
+                        <!-- Login Form -->
+                        <div id="loginForm">
+                            <h5 class="mb-4 text-center text-warning">Sign In</h5>
+                            <form id="loginFormSubmit">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control form-control-lg" id="loginUsername" required placeholder="Enter your username">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Password</label>
+                                    <div class="password-input-group">
+                                        <input type="password" class="form-control form-control-lg" id="loginPassword" required placeholder="Enter your password">
+                                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">Sign In</button>
+                            </form>
+                            <div class="text-center">
+                                <small class="text-muted">Don't have an account? 
+                                    <a href="#" onclick="toggleAuthForm()" class="text-warning fw-semibold">Register here</a>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Register Form -->
+                        <div id="registerForm" style="display:none;">
+                            <h5 class="mb-4 text-center text-warning">Create Account</h5>
+                            <form id="registerFormSubmit">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control form-control-lg" id="regUsername" required placeholder="Choose a username">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Password</label>
+                                    <div class="password-input-group">
+                                        <input type="password" class="form-control form-control-lg" id="regPassword" required placeholder="Create a password">
+                                        <button type="button" class="password-toggle" onclick="togglePassword('regPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Full Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="regName" required placeholder="Enter your full name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="tel" class="form-control form-control-lg" id="regPhone" required placeholder="Enter your phone number">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 btn-lg mb-3">Create Account</button>
+                            </form>
+                            <div class="text-center">
+                                <small class="text-muted">Already have an account? 
+                                    <a href="#" onclick="toggleAuthForm()" class="text-warning fw-semibold">Sign in here</a>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="container">
+        <!-- Home Page -->
+        <div id="homePage" class="page">
+            <!-- Hero Section -->
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-5 fw-bold mb-3">Craving Something Delicious?</h1>
+                    <p class="lead mb-4">Kain na! dito sa KainMami!</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="search-container">
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-dark border-0">
+                                        <i class="fas fa-search text-warning"></i>
+                                    </span>
+                                    <input type="text" class="form-control search-input border-0" id="searchInput" placeholder="Search for food">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Freedom Wall Container -->
+            <div class="freedom-wall-container">
+                <!-- Sticky Note Button -->
+                <button class="sticky-note-btn" id="stickyNoteBtn" aria-label="Freedom Wall">
+                    <i class="fas fa-comments"></i>
+                    <small>Freedom Wall</small>
+                </button>
+
+                <!-- Freedom Wall -->
+                <div id="freedomWall" class="freedom-wall">
+                    <div class="fw-header">
+                        <span><i class="fas fa-comment-dots me-2"></i>Freedom Wall</span>
+                        <button class="btn btn-sm btn-outline-warning" id="closeFreedomWall">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="fw-messages" id="freedomMessages">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                    <div class="fw-form">
+                        <textarea id="freedomInput" maxlength="100" placeholder="Share your thoughts..." class="form-control mb-2" rows="3"></textarea>
+                        <button onclick="submitFreedomNote()" class="btn btn-warning btn-sm w-100">Post to Wall</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="category-filter text-center">
+                <h5 class="fw-bold mb-4 text-warning">Browse Categories</h5>
+                <div>
+                    <button class="btn category-btn active" onclick="filterCategory('', this)">All Items</button>
+                    <button class="btn category-btn" onclick="filterCategory('Breakfast', this)">🍳 Breakfast</button>
+                    <button class="btn category-btn" onclick="filterCategory('Lunch', this)">🍔 Lunch</button>
+                    <button class="btn category-btn" onclick="filterCategory('Snacks', this)">🍟 Snacks</button>
+                    <button class="btn category-btn" onclick="filterCategory('Dinner', this)">🍝 Dinner</button>
+                    <button class="btn category-btn" onclick="filterCategory('Dessert', this)">🍰 Dessert</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="fw-bold mb-4 text-warning">Popular Items</h4>
+                </div>
+                <div id="foodsList" class="row"></div>
+            </div>
+        </div>
+
+        <!-- Cart Page -->
+        <div id="cartPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-shopping-cart me-2"></i>Shopping Cart</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="cartItems"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cart-summary sticky-top" style="top: 100px;">
+                        <h5 class="fw-bold text-warning mb-3">Order Summary</h5>
+                        <hr style="border-color: #444;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal" class="fw-bold text-warning">₱0.00</span>
+                        </div>
+                        <hr style="border-color: #444;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong id="cartTotal" class="text-warning">₱0.00</strong>
+                        </div>
+                        <button class="btn btn-primary w-100 btn-lg" onclick="startCheckout()">
+                            <i class="fas fa-check me-2"></i> Checkout Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div id="checkoutPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-cash-register me-2"></i>Checkout</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Order Summary -->
+                    <div class="checkout-section">
+                        <h5 class="fw-bold text-warning mb-3">Order Summary</h5>
+                        <div id="checkoutItems"></div>
+                        <hr style="border-color: #444;">
+                        <div class="d-flex justify-content-between">
+                            <strong>Total:</strong>
+                            <strong id="checkoutTotal" class="text-warning">₱0.00</strong>
+                        </div>
+                    </div>
+
+                    <!-- Order Type Selection -->
+                    <div class="checkout-section">
+                        <h5 class="fw-bold text-warning mb-3">Order Type</h5>
+                        
+                        <!-- Delivery Option -->
+                        <div class="order-type-option" id="deliveryOption" onclick="selectOrderType('delivery')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderType" id="delivery" value="delivery" checked>
+                                <label class="form-check-label fw-bold" for="delivery">
+                                    <i class="fas fa-truck me-2"></i>Delivery
+                                </label>
+                            </div>
+                            <div id="deliveryDetails" style="margin-top: 10px;">
+                                <div class="mb-3">
+                                    <label class="form-label">Delivery Address</label>
+                                    <input type="text" class="form-control" id="deliveryAddress" placeholder="Enter your delivery address">
+                                    <div class="delivery-info">
+                                        <small class="text-warning">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Delivery is only available around Bagong Silang Phase 1 Simbahan area
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Delivery Fee:</span>
+                                    <span class="text-warning fw-bold">₱49.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Option -->
+                        <div class="order-type-option" id="pickupOption" onclick="selectOrderType('pickup')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderType" id="pickup" value="pickup">
+                                <label class="form-check-label fw-bold" for="pickup">
+                                    <i class="fas fa-store me-2"></i>Self Pickup
+                                </label>
+                            </div>
+                            <div id="pickupDetails" style="display:none; margin-top: 10px;">
+                                <div class="alert alert-info">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Pick up your order at our store location
+                                    </small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Delivery Fee:</span>
+                                    <span class="text-success fw-bold">₱0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Special Instructions</label>
+                            <textarea class="form-control" id="specialInstructions" rows="3" placeholder="Any special instructions for delivery..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-section">
+                        <h5 class="fw-bold text-warning mb-3">Payment Method</h5>
+                        
+                        <!-- GCash Option -->
+                        <div class="payment-option" id="gcashOption" onclick="selectPayment('gcash')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="gcash" value="gcash">
+                                <label class="form-check-label fw-bold" for="gcash">
+                                    <i class="fas fa-mobile-alt me-2"></i>GCash
+                                </label>
+                            </div>
+                            <div id="gcashDetails" style="display:none; margin-top: 15px;">
+                                <div class="text-center mb-3">
+                                    <img src="https://via.placeholder.com/200x200?text=GCash+QR" class="qr-code" alt="GCash QR Code">
+                                    <p class="text-muted mt-2">Scan this QR code to pay</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account Name</label>
+                                        <input type="text" class="form-control" id="gcashName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account Number</label>
+                                        <input type="text" class="form-control" id="gcashNumber" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Reference Number</label>
+                                    <input type="text" class="form-control" id="gcashReference" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Proof of Payment <span class="text-danger">*</span></label>
+                                    <div class="file-upload-container required" id="gcashUploadContainer" onclick="document.getElementById('gcashProof').click()">
+                                        <i class="fas fa-cloud-upload-alt fa-2x text-warning mb-2"></i>
+                                        <p class="mb-1">Upload screenshot of payment</p>
+                                        <small class="text-muted">PNG, JPG up to 5MB</small>
+                                        <input type="file" id="gcashProof" accept="image/*" style="display: none" onchange="handleFileUpload(event, 'gcashPreview', 'gcashUploadContainer')" required>
+                                    </div>
+                                    <div class="upload-preview-container mt-2">
+                                        <img id="gcashPreview" class="upload-preview">
+                                    </div>
+                                    <small class="text-danger" id="gcashProofError" style="display: none;">Proof of payment is required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PayMaya Option -->
+                        <div class="payment-option" id="paymayaOption" onclick="selectPayment('paymaya')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymaya" value="paymaya">
+                                <label class="form-check-label fw-bold" for="paymaya">
+                                    <i class="fas fa-wallet me-2"></i>PayMaya
+                                </label>
+                            </div>
+                            <div id="paymayaDetails" style="display:none; margin-top: 15px;">
+                                <div class="text-center mb-3">
+                                    <img src="https://via.placeholder.com/200x200?text=PayMaya+QR" class="qr-code" alt="PayMaya QR Code">
+                                    <p class="text-muted mt-2">Scan this QR code to pay</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account Name</label>
+                                        <input type="text" class="form-control" id="paymayaName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account Number</label>
+                                        <input type="text" class="form-control" id="paymayaNumber" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Reference Number</label>
+                                    <input type="text" class="form-control" id="paymayaReference" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Proof of Payment <span class="text-danger">*</span></label>
+                                    <div class="file-upload-container required" id="paymayaUploadContainer" onclick="document.getElementById('paymayaProof').click()">
+                                        <i class="fas fa-cloud-upload-alt fa-2x text-warning mb-2"></i>
+                                        <p class="mb-1">Upload screenshot of payment</p>
+                                        <small class="text-muted">PNG, JPG up to 5MB</small>
+                                        <input type="file" id="paymayaProof" accept="image/*" style="display: none" onchange="handleFileUpload(event, 'paymayaPreview', 'paymayaUploadContainer')" required>
+                                    </div>
+                                    <div class="upload-preview-container mt-2">
+                                        <img id="paymayaPreview" class="upload-preview">
+                                    </div>
+                                    <small class="text-danger" id="paymayaProofError" style="display: none;">Proof of payment is required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cash Option -->
+                        <div class="payment-option" id="cashOption" onclick="selectPayment('cash')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash">
+                                <label class="form-check-label fw-bold" for="cash">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Cash on Delivery/Pickup
+                                </label>
+                            </div>
+                            <div id="cashMessage" style="display:none; margin-top: 10px;">
+                                <div class="alert alert-info">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <span id="cashMessageText">Cash payment is only available for customers who have completed at least 3 online payments.</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="cart-summary sticky-top" style="top: 100px;">
+                        <h5 class="fw-bold text-warning">Order Total</h5>
+                        <hr style="border-color: #444;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="checkoutSubtotal" class="fw-bold text-warning">₱0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Delivery Fee:</span>
+                            <span id="checkoutDeliveryFee">₱0.00</span>
+                        </div>
+                        <hr style="border-color: #444;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong id="checkoutFinalTotal" class="text-warning">₱0.00</strong>
+                        </div>
+                        <button class="btn btn-success w-100 btn-lg" onclick="confirmOrder()">
+                            <i class="fas fa-check-circle me-2"></i> Place Order
+                        </button>
+                        <button class="btn btn-secondary w-100 btn-lg mt-2" onclick="showPage('cart')">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Page -->
+        <div id="ordersPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-receipt me-2"></i>My Orders</h2>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+
+        <!-- Order Details Page -->
+        <div id="orderDetailsPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-receipt me-2"></i>Order Details</h2>
+            </div>
+            <div id="orderDetailsContent"></div>
+            <button class="btn btn-secondary mt-3" onclick="showPage('orders')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Orders
+            </button>
+        </div>
+
+        <!-- Account Page -->
+        <div id="accountPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-user-circle me-2"></i>Account Settings</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body p-4">
+                            <form id="accountForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control" id="accountUsername" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Full Name</label>
+                                    <input type="text" class="form-control" id="accountName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="tel" class="form-control" id="accountPhone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">New Password (leave blank to keep current)</label>
+                                    <div class="password-input-group">
+                                        <input type="password" class="form-control" id="accountPassword" placeholder="Enter new password">
+                                        <button type="button" class="password-toggle" onclick="togglePassword('accountPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 btn-lg">
+                                    <i class="fas fa-save me-2"></i> Update Account
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-white">Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Confirmation Modal -->
+    <div class="modal fade" id="deliveryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Confirm Delivery</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-white">Has your order been delivered successfully?</p>
+                    <div id="deliveryOrderInfo" class="mb-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="reportDeliveryIssue()">
+                        <i class="fas fa-exclamation-triangle me-1"></i> Report Issue
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="confirmDelivery()">
+                        <i class="fas fa-check me-1"></i> Yes, Delivered
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Rate Your Experience</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-white">How was your order experience?</p>
+                    <div id="ratingOrderInfo" class="mb-3"></div>
+                    <div class="text-center mb-3">
+                        <div class="rating-stars">
+                            <i class="far fa-star fa-2x rating-star" data-rating="1"></i>
+                            <i class="far fa-star fa-2x rating-star" data-rating="2"></i>
+                            <i class="far fa-star fa-2x rating-star" data-rating="3"></i>
+                            <i class="far fa-star fa-2x rating-star" data-rating="4"></i>
+                            <i class="far fa-star fa-2x rating-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Comments (optional)</label>
+                        <textarea class="form-control" id="ratingComment" rows="3" placeholder="Share your experience..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Skip</button>
+                    <button type="button" class="btn btn-primary" onclick="submitRating()">Submit Rating</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="modal fade" id="notificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Notification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="notificationContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = '/api';
+        let token = null;
+        let currentCategory = '';
+        let cart = [];
+        let currentUser = null;
+        let currentRating = 0;
+        let currentOrderId = null;
+        let logoutModal;
+        let deliveryModal;
+        let ratingModal;
+        let notificationModal;
+        let paymentMethods = {
+            gcash: true,
+            paymaya: true,
+            cash: true
+        };
+        let orderTypes = {
+            delivery: true,
+            pickup: true
+        };
+        let userCompletedOrders = 0;
+        let cashMinOrders = 3;
+        let currentOrderType = 'delivery';
+        let currentProofFiles = {
+            gcash: null,
+            paymaya: null
+        };
+        // ============ LOAD HOME PAGE WITH FOOD ITEMS ============
+        async function loadHome() {
+            showLoading(true);
+            try {
+                // Fetch food items from API
+                const foods = await apiCall(`${API_BASE}/foods`);
+                
+                const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+                const filteredFoods = foods.filter(food => 
+                    (currentCategory === '' || food.category === currentCategory) &&
+                    (food.name.toLowerCase().includes(searchTerm) || 
+                    food.description.toLowerCase().includes(searchTerm))
+                );
+
+                displayFoods(filteredFoods);
+            } catch (err) {
+                console.error('Error loading foods:', err);
+                document.getElementById('foodsList').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No food items found</h4>
+                        <p class="text-muted">Try adjusting your search or check back later</p>
+                    </div>
+                `;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============ DISPLAY FOOD ITEMS ============
+        function displayFoods(foods) {
+            const foodsList = document.getElementById('foodsList');
+            
+            if (!foods || foods.length === 0) {
+                foodsList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No food items found</h4>
+                        <p class="text-muted">Try adjusting your search or check back later</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = foods.map(food => `
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="product-card ${!food.is_available ? 'food-unavailable' : ''}">
+                        <img src="${food.image_url}" class="product-image" alt="${food.name}" 
+                            onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                        <div class="product-content">
+                            <div class="product-category">${food.category}</div>
+                            <h3 class="product-title">${food.name}</h3>
+                            <p class="product-description">${food.description || 'Delicious food item'}</p>
+                            <div class="product-price">₱${food.price.toFixed(2)}</div>
+                            ${!food.is_available ? `
+                                <div class="mb-2">
+                                    <span class="badge bg-danger">Currently Unavailable</span>
+                                </div>
+                            ` : ''}
+                            <div class="product-actions">
+                                <button class="btn btn-add-cart" onclick="addToCart(${JSON.stringify(food).replace(/"/g, '&quot;')})" 
+                                        ${!food.is_available ? 'disabled' : ''}>
+                                    <i class="fas fa-cart-plus me-2"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            foodsList.innerHTML = html;
+        }
+
+        // ============ UPDATE CURRENT PAGE ============
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page + 'Page').style.display = 'block';
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            // Find and activate the correct nav link
+            const navLink = document.querySelector(`a[onclick="showPage('${page}')"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+
+            // Update current page for auto-refresh
+            currentPage = page;
+
+            if (page === 'home') loadHome();
+            else if (page === 'cart') displayCart();
+            else if (page === 'orders') loadOrders();
+            else if (page === 'account') loadAccount();
+            // Note: orderDetails is handled separately
+        }
+        // ============ PASSWORD TOGGLE FUNCTION ============
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.parentNode.querySelector('.password-toggle i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                toggle.className = 'fas fa-eye';
+            }
+        }
+
+        // ============ ORDER TYPE SELECTION ============
+        function selectOrderType(type) {
+            currentOrderType = type;
+            
+            document.getElementById(type).checked = true;
+            
+            document.querySelectorAll('.order-type-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            if (type === 'delivery') {
+                document.getElementById('deliveryDetails').style.display = 'block';
+                document.getElementById('pickupDetails').style.display = 'none';
+                document.getElementById('checkoutDeliveryFee').textContent = '₱49.00';
+            } else {
+                document.getElementById('deliveryDetails').style.display = 'none';
+                document.getElementById('pickupDetails').style.display = 'block';
+                document.getElementById('checkoutDeliveryFee').textContent = '₱0.00';
+            }
+            
+            updateCheckoutTotals();
+        }
+
+        // ============ PAYMENT METHODS ============
+        async function loadPaymentMethods() {
+            try {
+                const response = await apiCall(`${API_BASE}/payment-methods`);
+                paymentMethods = response.methods;
+                orderTypes = response.order_types;
+                cashMinOrders = response.cash_min_orders || 3;
+                
+                if (!paymentMethods.gcash) {
+                    document.getElementById('gcashOption').classList.add('disabled');
+                    document.getElementById('gcash').disabled = true;
+                }
+                if (!paymentMethods.paymaya) {
+                    document.getElementById('paymayaOption').classList.add('disabled');
+                    document.getElementById('paymaya').disabled = true;
+                }
+                if (!paymentMethods.cash) {
+                    document.getElementById('cashOption').classList.add('disabled');
+                    document.getElementById('cash').disabled = true;
+                }
+
+                if (!orderTypes.delivery) {
+                    document.getElementById('deliveryOption').classList.add('disabled');
+                    document.getElementById('delivery').disabled = true;
+                    if (currentOrderType === 'delivery') {
+                        selectOrderType('pickup');
+                    }
+                }
+                if (!orderTypes.pickup) {
+                    document.getElementById('pickupOption').classList.add('disabled');
+                    document.getElementById('pickup').disabled = true;
+                    if (currentOrderType === 'pickup') {
+                        selectOrderType('delivery');
+                    }
+                }
+            } catch (err) {
+                console.log('Could not load payment methods');
+            }
+        }
+
+        function selectPayment(method) {
+            if (!paymentMethods[method]) {
+                showToast('This payment method is currently unavailable', 'error');
+                return;
+            }
+
+            if (method === 'cash') {
+                if (userCompletedOrders < cashMinOrders) {
+                    const message = `Cash payment is only available after completing ${cashMinOrders} online payments. You have ${userCompletedOrders} completed online payments.`;
+                    document.getElementById('cashMessageText').textContent = message;
+                    document.getElementById('cashMessage').style.display = 'block';
+                    showToast(message, 'error');
+                    return;
+                } else {
+                    document.getElementById('cashMessage').style.display = 'none';
+                }
+            }
+
+            document.getElementById(method).checked = true;
+            
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            document.getElementById('gcashDetails').style.display = 'none';
+            document.getElementById('paymayaDetails').style.display = 'none';
+            
+            if (method !== 'gcash') {
+                clearPaymentInputs('gcash');
+            }
+            if (method !== 'paymaya') {
+                clearPaymentInputs('paymaya');
+            }
+            
+            if (method === 'gcash') {
+                document.getElementById('gcashDetails').style.display = 'block';
+            } else if (method === 'paymaya') {
+                document.getElementById('paymayaDetails').style.display = 'block';
+            }
+        }
+
+        function clearPaymentInputs(method) {
+            document.getElementById(`${method}Name`).value = '';
+            document.getElementById(`${method}Number`).value = '';
+            document.getElementById(`${method}Reference`).value = '';
+            document.getElementById(`${method}Proof`).value = '';
+            document.getElementById(`${method}Preview`).style.display = 'none';
+            document.getElementById(`${method}ProofError`).style.display = 'none';
+            document.getElementById(`${method}UploadContainer`).classList.remove('required');
+            currentProofFiles[method] = null;
+        }
+
+        // ============ UPDATE CHECKOUT TOTALS ============
+        function updateCheckoutTotals() {
+            const subtotal = getCartTotal();
+            const deliveryFee = currentOrderType === 'delivery' ? 49 : 0;
+            const total = subtotal + deliveryFee;
+            
+            document.getElementById('checkoutSubtotal').textContent = '₱' + subtotal.toFixed(2);
+            document.getElementById('checkoutDeliveryFee').textContent = '₱' + deliveryFee.toFixed(2);
+            document.getElementById('checkoutFinalTotal').textContent = '₱' + total.toFixed(2);
+            document.getElementById('checkoutTotal').textContent = '₱' + total.toFixed(2);
+        }
+
+        // ============ IMAGE UPLOAD HANDLING ============
+        async function handleFileUpload(event, previewId, containerId) {
+            const file = event.target.files[0];
+            const container = document.getElementById(containerId);
+            
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file', 'error');
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('Image size must be less than 5MB', 'error');
+                    return;
+                }
+
+                try {
+                    // Upload the image
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    const response = await fetch(`${API_BASE}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        const preview = document.getElementById(previewId);
+                        preview.src = result.image_url;
+                        preview.style.display = 'block';
+                        
+                        const method = previewId.includes('gcash') ? 'gcash' : 'paymaya';
+                        currentProofFiles[method] = result.image_url;
+                        
+                        container.classList.remove('required');
+                        document.getElementById(`${method}ProofError`).style.display = 'none';
+                        
+                        const previewContainer = preview.parentNode;
+                        if (!previewContainer.querySelector('.remove-image-btn')) {
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-image-btn';
+                            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            removeBtn.onclick = function() {
+                                preview.style.display = 'none';
+                                event.target.value = '';
+                                removeBtn.remove();
+                                currentProofFiles[method] = null;
+                                container.classList.add('required');
+                            };
+                            previewContainer.appendChild(removeBtn);
+                        }
+                    } else {
+                        showToast('Failed to upload image', 'error');
+                    }
+                } catch (err) {
+                    showToast('Failed to upload image', 'error');
+                }
+            }
+        }
+
+        // ============ API ERROR HANDLER ============
+        async function apiCall(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Call failed:', error);
+                showToast(error.message, 'error');
+                throw error;
+            }
+        }
+
+        // ============ LOADING FUNCTIONS ============
+        function showLoading(show = true) {
+            const loader = document.getElementById('loadingOverlay');
+            if (loader) {
+                loader.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // ============ SYSTEM STATUS CHECK ============
+        async function checkSystemStatus() {
+            try {
+                const status = await apiCall(`${API_BASE}/system/ordering`);
+                if (!status.enabled) {
+                    document.getElementById('systemClosedOverlay').style.display = 'flex';
+                } else {
+                    document.getElementById('systemClosedOverlay').style.display = 'none';
+                }
+            } catch (err) {
+                console.log('Could not check system status');
+            }
+        }
+
+        // ============ Cart Management ============
+        function addToCart(food) {
+            if (document.getElementById('systemClosedOverlay').style.display === 'flex') {
+                showToast('Ordering system is currently closed', 'error');
+                return;
+            }
+
+            if (!food.is_available) {
+                showToast('This item is currently unavailable', 'error');
+                return;
+            }
+
+            const existing = cart.find(item => item.id === food.id);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({
+                    id: food.id,
+                    name: food.name,
+                    price: food.price,
+                    quantity: 1,
+                    image_url: food.image_url,
+                    is_available: food.is_available
+                });
+            }
+            updateCartBadge();
+            showToast('Added to cart!', 'success');
+        }
+
+        function removeFromCart(foodId) {
+            cart = cart.filter(item => item.id !== foodId);
+            updateCartBadge();
+            displayCart();
+        }
+
+        function updateQuantity(foodId, delta) {
+            const item = cart.find(item => item.id === foodId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(foodId);
+                } else {
+                    displayCart();
+                    updateCartBadge();
+                }
+            }
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cartBadge');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // ============ INITIALIZE APP ============
+        window.addEventListener('DOMContentLoaded', () => {
+            token = localStorage.getItem('clientToken');
+            logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            deliveryModal = new bootstrap.Modal(document.getElementById('deliveryModal'));
+            ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
+            notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            
+            // Initialize current page
+            currentPage = 'home';
+            
+            // Initialize star rating
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    currentRating = rating;
+                    
+                    document.querySelectorAll('.rating-star').forEach((s, index) => {
+                        if (index < rating) {
+                            s.className = 'fas fa-star fa-2x rating-star text-warning';
+                        } else {
+                            s.className = 'far fa-star fa-2x rating-star';
+                        }
+                    });
+                });
+            });
+            
+            // Initialize Freedom Wall
+            initializeFreedomWall();
+            
+            // Initialize search functionality
+            document.getElementById('searchInput')?.addEventListener('input', loadHome);
+            
+            if (token) {
+                currentUser = JSON.parse(localStorage.getItem('clientUser'));
+                document.getElementById('mainApp').style.display = 'block';
+                loadHome(); // Load home page immediately
+                checkSystemStatus();
+                checkPendingDeliveryConfirmations();
+                loadPaymentMethods();
+                loadUserOrderHistory();
+                loadNotifications();
+                startAutoRefresh();
+            } else {
+                document.getElementById('loginPage').style.display = 'block';
+            }
+        });
+
+        // ============ FREEDOM WALL FUNCTIONS ============
+        function initializeFreedomWall() {
+            const stickyNoteBtn = document.getElementById('stickyNoteBtn');
+            const freedomWall = document.getElementById('freedomWall');
+            const closeBtn = document.getElementById('closeFreedomWall');
+
+            stickyNoteBtn.addEventListener('click', () => {
+                freedomWall.classList.toggle('active');
+                loadFreedomWall();
+            });
+
+            closeBtn.addEventListener('click', () => {
+                freedomWall.classList.remove('active');
+            });
+
+            // Load initial messages
+            loadFreedomWall();
+        }
+
+        async function loadFreedomWall() {
+            try {
+                const response = await fetch(`${API_BASE}/freedom-wall`);
+                const posts = await response.json();
+                
+                const messagesContainer = document.getElementById('freedomMessages');
+                messagesContainer.innerHTML = '';
+                
+                if (posts.length === 0) {
+                    messagesContainer.innerHTML = '<p class="text-muted text-center">No messages yet. Be the first to post!</p>';
+                    return;
+                }
+                
+                posts.forEach(post => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'fw-message';
+                    messageDiv.innerHTML = `
+                        <div class="fw-bold">${post.user_name}</div>  <!-- This will show 'Administrator' or 'Anonymous' -->
+                        <div>${post.content}</div>
+                        <small class="text-muted">${post.created_at}</small>
+                    `;
+                    messagesContainer.appendChild(messageDiv);
+                });
+            } catch (err) {
+                console.error('Failed to load freedom wall:', err);
+            }
+        }
+
+        async function submitFreedomNote() {
+            const input = document.getElementById('freedomInput');
+            const content = input.value.trim();
+            
+            if (!content) {
+                showToast('Please enter a message', 'error');
+                return;
+            }
+            
+            if (!token) {
+                showToast('Please login to post', 'error');
+                return;
+            }
+            
+            try {
+                const response = await apiCall(`${API_BASE}/freedom-wall`, {
+                    method: 'POST',
+                    body: JSON.stringify({ content })
+                });
+                
+                input.value = '';
+                showToast('Message posted successfully!', 'success');
+                loadFreedomWall();
+            } catch (err) {
+                showToast('Failed to post message', 'error');
+            }
+        }
+
+        // ============ NOTIFICATION FUNCTIONS ============
+        async function loadNotifications() {
+            try {
+                const notifications = await apiCall(`${API_BASE}/notifications`);
+                
+                // Update notification badge
+                const unreadCount = notifications.filter(n => !n.is_read).length;
+                document.getElementById('orderNotificationBadge').textContent = unreadCount;
+                document.getElementById('orderNotificationBadge').style.display = unreadCount > 0 ? 'flex' : 'none';
+                
+                // Show latest unread notification
+                const latestUnread = notifications.find(n => !n.is_read);
+                if (latestUnread) {
+                    showNotification(latestUnread.message);
+                    // Mark as read
+                    await apiCall(`${API_BASE}/notifications/${latestUnread.id}/read`, {
+                        method: 'PUT'
+                    });
+                }
+            } catch (err) {
+                console.log('Could not load notifications');
+            }
+        }
+
+        function showNotification(message) {
+            document.getElementById('notificationContent').innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-bell fa-3x text-warning mb-3"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+            notificationModal.show();
+        }
+
+        // ============ CLIENT READY FOR PICKUP ============
+        async function clientReadyForPickup(orderId) {
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}/client-ready`, {
+                    method: 'POST'
+                });
+                showToast('Pickup notification sent to admin!', 'success');
+            } catch (err) {
+                showToast('Failed to send pickup notification', 'error');
+            }
+        }
+
+        async function loadUserOrderHistory() {
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                userCompletedOrders = orders.filter(o => 
+                    o.status === 'delivered' && 
+                    o.payment_method !== 'cash'
+                ).length;
+
+                const readyOrders = orders.filter(o => o.status === 'ready');
+                document.getElementById('orderNotificationBadge').textContent = readyOrders.length;
+                document.getElementById('orderNotificationBadge').style.display = readyOrders.length > 0 ? 'flex' : 'none';
+            } catch (err) {
+                console.log('Could not load user order history');
+            }
+        }
+
+        function toggleAuthForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+        document.getElementById('loginFormSubmit').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const data = await apiCall(`${API_BASE}/login`, {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (data.user.role === 'admin') {
+                    window.location.href = '/admin';
+                } else {
+                    token = data.token;
+                    currentUser = data.user;
+                    localStorage.setItem('clientToken', token);
+                    localStorage.setItem('clientUser', JSON.stringify(currentUser));
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    loadHome();
+                    checkSystemStatus();
+                    checkPendingDeliveryConfirmations();
+                    loadPaymentMethods();
+                    loadUserOrderHistory();
+                    loadNotifications();
+                    startAutoRefresh();
+                    showToast('Login successful!', 'success');
+                }
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        });
+               
+        document.getElementById('registerFormSubmit').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById('regUsername').value,
+                password: document.getElementById('regPassword').value,
+                name: document.getElementById('regName').value,
+                phone: document.getElementById('regPhone').value
+            };
+
+            try {
+                const responseData = await apiCall(`${API_BASE}/register`, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                showToast('Registration successful! Please login.', 'success');
+                toggleAuthForm();
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        });
+
+        function confirmLogout() {
+            logoutModal.show();
+        }
+
+        function logout() {
+            localStorage.removeItem('clientToken');
+            localStorage.removeItem('clientUser');
+            token = null;
+            currentUser = null;
+            cart = [];
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            logoutModal.hide();
+            showToast('Logged out successfully', 'success');
+        }
+
+        // ============ Page Navigation ============
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page + 'Page').style.display = 'block';
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            // Find and activate the correct nav link
+            const navLink = document.querySelector(`a[onclick="showPage('${page}')"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+
+            if (page === 'home') loadHome();
+            else if (page === 'cart') displayCart();
+            else if (page === 'orders') loadOrders();
+            else if (page === 'account') loadAccount();
+            // Note: orderDetails is handled separately
+        }
+
+        // FIXED: Show order details function
+        function showOrderDetails(orderId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            
+            // Show order details page
+            document.getElementById('orderDetailsPage').style.display = 'block';
+
+            // Update navigation - activate Orders link since we're viewing order details
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`a[onclick="showPage('orders')"]`).classList.add('active');
+
+            // Load the order details
+            loadOrderDetails(orderId);
+        }
+
+        // FIXED: Load Order Details function
+        async function loadOrderDetails(orderId) {
+            showLoading(true);
+            try {
+                const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+
+                const deliveryFee = order.order_type === 'delivery' ? 49 : 0;
+                const grandTotal = order.total_price + deliveryFee;
+
+                const detailsHtml = `
+                    <div class="order-details-card">
+                        <h4 class="text-warning mb-4">Order #${order.id}</h4>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p><strong>Status:</strong> <span class="order-status-badge status-${order.status.replace('_', '')}">${order.status.toUpperCase().replace('_', ' ')}</span></p>
+                                <p><strong>Order Type:</strong> ${order.order_type === 'delivery' ? 'Delivery' : 'Self Pickup'}</p>
+                                <p><strong>Order Date:</strong> ${order.created_at}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Payment Method:</strong> ${order.payment_method ? order.payment_method.toUpperCase() : 'Cash'}</p>
+                                <p><strong>Total Amount:</strong> ₱${order.total_price.toFixed(2)}</p>
+                                ${order.order_type === 'delivery' ? `<p><strong>Delivery Address:</strong> ${order.delivery_address || 'Not specified'}</p>` : ''}
+                            </div>
+                        </div>
+
+                        ${order.payment_details ? `
+                        <div class="mb-4">
+                            <h5 class="text-warning mb-3">Payment Information</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Account Name:</strong> ${order.payment_details.account_name || 'N/A'}</p>
+                                    <p><strong>Account Number:</strong> ${order.payment_details.account_number || 'N/A'}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Reference Number:</strong> ${order.payment_details.reference_number || 'N/A'}</p>
+                                    ${order.proof_image ? `
+                                        <p><strong>Proof of Payment:</strong></p>
+                                        <img src="${order.proof_image}" class="proof-image" alt="Proof of Payment" style="max-width: 200px;">
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        ${order.special_instructions ? `
+                        <div class="mb-4">
+                            <h5 class="text-warning mb-3">Special Instructions</h5>
+                            <p class="p-3 bg-dark rounded">${order.special_instructions}</p>
+                        </div>
+                        ` : ''}
+
+                        <div class="mb-4">
+                            <h5 class="text-warning mb-3">Order Items</h5>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Price</th>
+                                            <th>Qty</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${order.items.map(item => `
+                                            <tr>
+                                                <td>${item.name}</td>
+                                                <td>₱${item.price.toFixed(2)}</td>
+                                                <td>${item.quantity}</td>
+                                                <td>₱${(item.price * item.quantity).toFixed(2)}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="text-end p-3 bg-dark rounded">
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    <p class="mb-1">Subtotal:</p>
+                                    ${order.order_type === 'delivery' ? `<p class="mb-1">Delivery Fee:</p>` : ''}
+                                    <p class="mb-0 fw-bold">Grand Total:</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="mb-1">₱${order.total_price.toFixed(2)}</p>
+                                    ${order.order_type === 'delivery' ? `<p class="mb-1">₱49.00</p>` : ''}
+                                    <p class="mb-0 fw-bold text-warning">₱${grandTotal.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('orderDetailsContent').innerHTML = detailsHtml;
+            } catch (err) {
+                console.error('Error loading order details:', err);
+                document.getElementById('orderDetailsContent').innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>Error Loading Order Details</h5>
+                        <p>Failed to load order details. Please try again.</p>
+                        <small>Error: ${err.message}</small>
+                    </div>
+                `;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        document.getElementById('searchInput')?.addEventListener('input', loadHome);
+
+        function filterCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            loadHome();
+        }
+
+        // ============ Display Cart ============
+        function displayCart() {
+            if (cart.length === 0) {
+                document.getElementById('cartItems').innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">Your cart is empty</h4>
+                        <p class="text-muted mb-4">Add some delicious items to get started!</p>
+                        <button class="btn btn-primary btn-lg" onclick="showPage('home')">
+                            <i class="fas fa-utensils me-2"></i> Browse Menu
+                        </button>
+                    </div>
+                `;
+                document.getElementById('cartSubtotal').textContent = '₱0.00';
+                document.getElementById('cartTotal').textContent = '₱0.00';
+                return;
+            }
+
+            const html = cart.map(item => `
+                <div class="card product-card mb-3">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <img src="${item.image_url}" class="img-fluid rounded" alt="${item.name}" style="height: 80px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100?text=No+Image'">
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="fw-bold">${item.name}</h5>
+                                <p class="text-muted mb-0">₱${item.price.toFixed(2)} each</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                    <button class="btn btn-outline-secondary" disabled>${item.quantity}</button>
+                                    <button class="btn btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h5 class="text-warning fw-bold">₱${(item.price * item.quantity).toFixed(2)}</h5>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('cartItems').innerHTML = html;
+            const subtotal = getCartTotal();
+            document.getElementById('cartSubtotal').textContent = '₱' + subtotal.toFixed(2);
+            document.getElementById('cartTotal').textContent = '₱' + subtotal.toFixed(2);
+        }
+
+        // ============ CHECKOUT PROCESS ============
+        function startCheckout() {
+            if (cart.length === 0) {
+                showToast('Cart is empty', 'error');
+                return;
+            }
+
+            if (!confirm('Proceed to checkout?')) return;
+
+            const checkoutItemsHtml = cart.map(item => `
+                <div class="d-flex justify-content-between mb-2">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('checkoutItems').innerHTML = checkoutItemsHtml;
+            
+            selectOrderType('delivery');
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('gcashDetails').style.display = 'none';
+            document.getElementById('paymayaDetails').style.display = 'none';
+            document.getElementById('cashMessage').style.display = 'none';
+
+            currentProofFiles = { gcash: null, paymaya: null };
+
+            showPage('checkout');
+        }
+
+        async function confirmOrder() {
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+            if (!paymentMethod) {
+                showToast('Please select a payment method', 'error');
+                return;
+            }
+
+            if (!paymentMethods[paymentMethod.value]) {
+                showToast('This payment method is currently unavailable', 'error');
+                return;
+            }
+
+            if (paymentMethod.value === 'cash') {
+                if (userCompletedOrders < cashMinOrders) {
+                    showToast(`Cash payment requires ${cashMinOrders} completed online payments. You have ${userCompletedOrders}.`, 'error');
+                    return;
+                }
+            }
+
+            const orderType = currentOrderType;
+            const deliveryAddress = document.getElementById('deliveryAddress').value;
+            
+            if (orderType === 'delivery' && !deliveryAddress) {
+                showToast('Please enter delivery address', 'error');
+                return;
+            }
+
+            // Validate online payment details
+            if (paymentMethod.value === 'gcash') {
+                const gcashName = document.getElementById('gcashName').value;
+                const gcashNumber = document.getElementById('gcashNumber').value;
+                const gcashReference = document.getElementById('gcashReference').value;
+                
+                if (!gcashName || !gcashNumber || !gcashReference) {
+                    showToast('Please fill all GCash payment details', 'error');
+                    return;
+                }
+
+                if (!currentProofFiles.gcash) {
+                    document.getElementById('gcashProofError').style.display = 'block';
+                    document.getElementById('gcashUploadContainer').classList.add('required');
+                    showToast('Proof of payment is required for GCash', 'error');
+                    return;
+                }
+            } else if (paymentMethod.value === 'paymaya') {
+                const paymayaName = document.getElementById('paymayaName').value;
+                const paymayaNumber = document.getElementById('paymayaNumber').value;
+                const paymayaReference = document.getElementById('paymayaReference').value;
+                
+                if (!paymayaName || !paymayaNumber || !paymayaReference) {
+                    showToast('Please fill all PayMaya payment details', 'error');
+                    return;
+                }
+
+                if (!currentProofFiles.paymaya) {
+                    document.getElementById('paymayaProofError').style.display = 'block';
+                    document.getElementById('paymayaUploadContainer').classList.add('required');
+                    showToast('Proof of payment is required for PayMaya', 'error');
+                    return;
+                }
+            }
+
+            showLoading(true);
+            try {
+                const orderData = {
+                    items: cart,
+                    total_price: getCartTotal(),
+                    order_type: orderType,
+                    delivery_address: orderType === 'delivery' ? deliveryAddress : null,
+                    special_instructions: document.getElementById('specialInstructions').value,
+                    payment_method: paymentMethod.value
+                };
+
+                // Add payment details for online payments
+                if (paymentMethod.value === 'gcash') {
+                    const gcashName = document.getElementById('gcashName').value;
+                    const gcashNumber = document.getElementById('gcashNumber').value;
+                    const gcashReference = document.getElementById('gcashReference').value;
+                    
+                    orderData.payment_details = {
+                        account_name: gcashName,
+                        account_number: gcashNumber,
+                        reference_number: gcashReference,
+                        proof_image: currentProofFiles.gcash
+                    };
+                } else if (paymentMethod.value === 'paymaya') {
+                    const paymayaName = document.getElementById('paymayaName').value;
+                    const paymayaNumber = document.getElementById('paymayaNumber').value;
+                    const paymayaReference = document.getElementById('paymayaReference').value;
+                    
+                    orderData.payment_details = {
+                        account_name: paymayaName,
+                        account_number: paymayaNumber,
+                        reference_number: paymayaReference,
+                        proof_image: currentProofFiles.paymaya
+                    };
+                }
+
+                const response = await apiCall(`${API_BASE}/orders`, {
+                    method: 'POST',
+                    body: JSON.stringify(orderData)
+                });
+
+                // Clear cart
+                cart = [];
+                updateCartBadge();
+                
+                showToast('Order placed successfully! Waiting for payment approval.', 'success');
+                showPage('orders');
+                
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============ DELIVERY CONFIRMATION ============
+        async function checkPendingDeliveryConfirmations() {
+            try {
+                const response = await apiCall(`${API_BASE}/orders/pending-delivery`);
+                if (response.orders && response.orders.length > 0) {
+                    const order = response.orders[0];
+                    showDeliveryConfirmation(order);
+                }
+            } catch (err) {
+                console.log('No pending delivery confirmations');
+            }
+        }
+
+        function showDeliveryConfirmation(order) {
+            currentOrderId = order.id;
+            document.getElementById('deliveryOrderInfo').innerHTML = `
+                <div class="card product-card">
+                    <div class="card-body">
+                        <h6>Order #${order.id}</h6>
+                        <p class="mb-1"><strong>Items:</strong> ${order.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                        <p class="mb-0"><strong>Total:</strong> ₱${order.total_price.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+            deliveryModal.show();
+        }
+
+        async function confirmDelivery() {
+            try {
+                await apiCall(`${API_BASE}/orders/${currentOrderId}/confirm-delivery`, {
+                    method: 'POST'
+                });
+                
+                deliveryModal.hide();
+                showRatingModal(currentOrderId);
+                showToast('Delivery confirmed! Thank you for your order.', 'success');
+            } catch (err) {
+                showToast('Failed to confirm delivery', 'error');
+            }
+        }
+
+        async function reportDeliveryIssue() {
+            try {
+                await apiCall(`${API_BASE}/orders/${currentOrderId}/report-issue`, {
+                    method: 'POST',
+                    body: JSON.stringify({ issue: 'Delivery not received' })
+                });
+                
+                deliveryModal.hide();
+                showToast('Issue reported. We will contact you shortly.', 'success');
+            } catch (err) {
+                showToast('Failed to report issue', 'error');
+            }
+        }
+
+        // ============ RATING SYSTEM ============
+        function showRatingModal(orderId) {
+            currentOrderId = orderId;
+            currentRating = 0;
+            
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.className = 'far fa-star fa-2x rating-star';
+            });
+            
+            document.getElementById('ratingComment').value = '';
+            ratingModal.show();
+        }
+
+        async function submitRating() {
+            if (currentRating === 0) {
+                showToast('Please select a rating', 'error');
+                return;
+            }
+
+            try {
+                await apiCall(`${API_BASE}/orders/${currentOrderId}/rate`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        rating: currentRating,
+                        comment: document.getElementById('ratingComment').value
+                    })
+                });
+                
+                ratingModal.hide();
+                showToast('Thank you for your feedback!', 'success');
+                loadOrders();
+            } catch (err) {
+                showToast('Failed to submit rating', 'error');
+            }
+        }
+
+        // ============ Load Orders ============
+        async function loadOrders() {
+            showLoading(true);
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+
+                if (orders.length === 0) {
+                    document.getElementById('ordersList').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-receipt fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No orders yet</h4>
+                            <p class="text-muted">Your order history will appear here</p>
+                        </div>
+                    `;
+                    return;
+                }
+                const html = orders.map(o => `
+                    <div class="card product-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Order #${o.id}</h5>
+                                    <small class="text-muted">${o.created_at}</small>
+                                </div>
+                                <span class="order-status-badge status-${o.status.replace('_', '')}">
+                                    ${o.status.toUpperCase().replace('_', ' ')}
+                                </span>
+                            </div>
+                            <p class="mb-2"><strong>Items:</strong> ${o.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                            <p class="mb-2"><strong>Payment:</strong> ${o.payment_method || 'Cash'}</p>
+                            <p class="mb-2"><strong>Type:</strong> ${o.order_type || 'Delivery'}</p>
+                            <h5 class="text-warning fw-bold mb-3">Total: ₱${o.total_price.toFixed(2)}</h5>
+                            
+                            <div class="d-flex gap-2 flex-wrap">
+                                <!-- MAKE SURE THIS BUTTON EXISTS -->
+                                <button class="btn btn-sm btn-outline-primary" onclick="showOrderDetails(${o.id})">
+                                    <i class="fas fa-eye me-1"></i> View Details
+                                </button>
+                                
+                                ${o.status === 'delivered' && !o.rated ? `
+                                    <button class="btn btn-sm btn-primary" onclick="showRatingModal(${o.id})">
+                                        <i class="fas fa-star me-1"></i> Rate Order
+                                    </button>
+                                ` : ''}
+                                
+                                ${o.status === 'ready' ? `
+                                    <button class="btn btn-sm btn-success" onclick="clientReadyForPickup(${o.id})">
+                                        <i class="fas fa-bell me-1"></i> Ready for Pickup
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('ordersList').innerHTML = html;
+
+                const readyOrders = orders.filter(o => o.status === 'ready');
+                document.getElementById('orderNotificationBadge').textContent = readyOrders.length;
+                document.getElementById('orderNotificationBadge').style.display = readyOrders.length > 0 ? 'flex' : 'none';
+
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============ Load Order Details ============
+            async function loadOrderDetails(orderId) {
+                showLoading(true);
+                try {
+                    const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+
+                    const deliveryFee = order.order_type === 'delivery' ? 49 : 0;
+                    const grandTotal = order.total_price + deliveryFee;
+
+                    const detailsHtml = `
+                        <div class="order-details-card">
+                            <h4 class="text-warning mb-4">Order #${order.id}</h4>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <p><strong>Status:</strong> <span class="order-status-badge status-${order.status.replace('_', '')}">${order.status.toUpperCase().replace('_', ' ')}</span></p>
+                                    <p><strong>Order Type:</strong> ${order.order_type === 'delivery' ? 'Delivery' : 'Self Pickup'}</p>
+                                    <p><strong>Order Date:</strong> ${order.created_at}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Payment Method:</strong> ${order.payment_method ? order.payment_method.toUpperCase() : 'Cash'}</p>
+                                    <p><strong>Total Amount:</strong> ₱${order.total_price.toFixed(2)}</p>
+                                    ${order.order_type === 'delivery' ? `<p><strong>Delivery Address:</strong> ${order.delivery_address || 'Not specified'}</p>` : ''}
+                                </div>
+                            </div>
+
+                            ${order.payment_details ? `
+                            <div class="mb-4">
+                                <h5 class="text-warning mb-3">Payment Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Account Name:</strong> ${order.payment_details.account_name || 'N/A'}</p>
+                                        <p><strong>Account Number:</strong> ${order.payment_details.account_number || 'N/A'}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Reference Number:</strong> ${order.payment_details.reference_number || 'N/A'}</p>
+                                        ${order.proof_image ? `
+                                            <p><strong>Proof of Payment:</strong></p>
+                                            <img src="${order.proof_image}" class="proof-image" alt="Proof of Payment" style="max-width: 200px;">
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${order.special_instructions ? `
+                            <div class="mb-4">
+                                <h5 class="text-warning mb-3">Special Instructions</h5>
+                                <p class="p-3 bg-dark rounded">${order.special_instructions}</p>
+                            </div>
+                            ` : ''}
+
+                            <div class="mb-4">
+                                <h5 class="text-warning mb-3">Order Items</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Price</th>
+                                                <th>Qty</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${order.items.map(item => `
+                                                <tr>
+                                                    <td>${item.name}</td>
+                                                    <td>₱${item.price.toFixed(2)}</td>
+                                                    <td>${item.quantity}</td>
+                                                    <td>₱${(item.price * item.quantity).toFixed(2)}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="text-end p-3 bg-dark rounded">
+                                <div class="row">
+                                    <div class="col-6 text-start">
+                                        <p class="mb-1">Subtotal:</p>
+                                        ${order.order_type === 'delivery' ? `<p class="mb-1">Delivery Fee:</p>` : ''}
+                                        <p class="mb-0 fw-bold">Grand Total:</p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <p class="mb-1">₱${order.total_price.toFixed(2)}</p>
+                                        ${order.order_type === 'delivery' ? `<p class="mb-1">₱49.00</p>` : ''}
+                                        <p class="mb-0 fw-bold text-warning">₱${grandTotal.toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById('orderDetailsContent').innerHTML = detailsHtml;
+                } catch (err) {
+                    console.error('Error loading order details:', err);
+                    document.getElementById('orderDetailsContent').innerHTML = `
+                        <div class="alert alert-danger">
+                            <h5>Error Loading Order Details</h5>
+                            <p>Failed to load order details. Please try again.</p>
+                            <small>Error: ${err.message}</small>
+                        </div>
+                    `;
+                } finally {
+                    showLoading(false);
+                }
+            }
+
+        // ============ Load Account ============
+        async function loadAccount() {
+            showLoading(true);
+            try {
+                const user = await apiCall(`${API_BASE}/account`);
+
+                document.getElementById('accountUsername').value = user.username;
+                document.getElementById('accountName').value = user.name;
+                document.getElementById('accountPhone').value = user.phone;
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        document.getElementById('accountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById('accountName').value,
+                phone: document.getElementById('accountPhone').value
+            };
+
+            const password = document.getElementById('accountPassword').value;
+            if (password) {
+                data.password = password;
+            }
+
+            try {
+                await apiCall(`${API_BASE}/account`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showToast('Account updated successfully', 'success');
+                document.getElementById('accountPassword').value = '';
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        });
+
+        // ============ AUTO REFRESH ============
+        function startAutoRefresh() {
+            setInterval(() => {
+                if (currentPage === 'orders') loadOrders();
+                if (currentPage === 'home') loadHome();
+                loadNotifications();
+                loadUserOrderHistory();
+            }, 30000);
+        }
+
+        // ============ Toast Notifications ============
+        function showToast(message, type) {
+            const toastClass = type === 'success' ? 'toast-success' : 
+                             type === 'error' ? 'toast-error' : 
+                             type === 'warning' ? 'toast-warning' : 'toast-info';
+            
+            const toastHtml = `
+                <div class="toast align-items-center text-white border-0 position-fixed bottom-0 end-0 m-3 ${toastClass}" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', toastHtml);
+            const toastEl = document.querySelector('.toast:last-child');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            setTimeout(() => toastEl.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
