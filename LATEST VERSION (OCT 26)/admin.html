@@ -1,0 +1,4492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --yellow: #FFD700;
+            --gold: #FFC107;
+            --light-yellow: #FFF9C4;
+            --gray: #6C757D;
+            --success: #28A745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+        }
+        
+        body { 
+            padding-top: 80px; 
+            background: var(--dark-gray);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: var(--black) !important;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--yellow);
+        }
+
+        .bg-dark.rounded {
+            border: 1px solid #444;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%) !important;
+        }
+
+        .navbar-brand { 
+            font-weight: 800; 
+            font-size: 1.8rem;
+            color: var(--yellow) !important;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--yellow) !important;
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 50%;
+        }
+        
+        /* Page Headers - Fixed Spacing */
+        .page-header {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--yellow);
+        }
+        
+        .page-header h2 {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        /* E-commerce Product Cards */
+        .product-card {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            border: 2px solid #333;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 25px;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--yellow);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+        }
+        
+        .product-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-category {
+            background: #333;
+            color: var(--yellow);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-title {
+            color: var(--yellow);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .product-description {
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            /* Add vendor prefixes for line-clamp */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            /* Standard property */
+            line-clamp: 2;
+        }
+        
+        .product-price {
+            color: var(--yellow);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-warning {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: var(--black);
+            font-weight: 600;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-info {
+            background: var(--info);
+            border-color: var(--info);
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Order Status Buttons */
+        .btn-in-process {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: var(--black);
+        }
+        
+        .btn-ready {
+            background: var(--info);
+            border-color: var(--info);
+            color: white;
+        }
+        
+        .btn-delivered {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .btn-waiting-approval {
+            background: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-cancelled {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+        
+        .category-btn {
+            background: #333;
+            border: 2px solid #555;
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
+        }
+        
+        /* Admin Stats */
+        .admin-stats {
+            background: var(--dark-gray);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border: 2px solid #333;
+            text-align: center;
+        }
+        
+        .admin-stats h3 {
+            color: var(--yellow);
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+        
+        .admin-stats i {
+            color: var(--yellow);
+        }
+        
+        /* Form Controls */
+        .form-control {
+            background: #2A2A2A;
+            border: 2px solid #444;
+            color: white;
+        }
+        
+        .form-control:focus {
+            background: #2A2A2A;
+            border-color: var(--yellow);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+        
+        .form-label {
+            color: var(--yellow);
+            font-weight: 600;
+        }
+        
+        /* Password Input Group */
+        .password-input-group {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--yellow);
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--dark-gray);
+            border: 2px solid #333;
+            color: white;
+        }
+        
+        .card-header {
+            background: #333 !important;
+            border-bottom: 1px solid #444;
+            color: var(--yellow);
+        }
+        
+        /* Text Colors */
+        .text-primary {
+            color: var(--yellow) !important;
+        }
+        
+        .text-muted {
+            color: #888 !important;
+        }
+        
+        /* Modal */
+        .modal-content {
+            background: var(--dark-gray);
+            color: white;
+            border: 2px solid var(--yellow);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #444;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #444;
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        /* Page Sections */
+        #loginPage, #mainApp { display: none; }
+        
+        /* Toast Notifications - UPDATED: Black text and higher z-index */
+        .toast {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            z-index: 99999 !important;
+            color: #000000 !important;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #00b09b, #96c93d) !important;
+            color: #000000 !important;
+            border-left: 4px solid #00b09b;
+        }
+
+        .toast-error {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b) !important;
+            color: #000000 !important;
+            border-left: 4px solid #ff416c;
+        }
+
+        .toast-warning {
+            background: linear-gradient(135deg, #f7971e, #ffd200) !important;
+            color: #000000 !important;
+            border-left: 4px solid #f7971e;
+        }
+
+        .toast-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+            color: #000000 !important;
+            border-left: 4px solid #4facfe;
+        }
+    
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+
+        /* Food Availability Toggle */
+        .availability-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .food-unavailable {
+            position: relative;
+            opacity: 0.6;
+        }
+
+        .food-unavailable::after {
+            content: "❌ HIDDEN";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* File Upload Styling */
+        .file-upload-container {
+            border: 2px dashed #555;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .file-upload-container.dragover {
+            border-color: var(--yellow);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .upload-preview-container {
+            position: relative;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .upload-preview-container img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            border: 2px solid var(--yellow);
+            object-fit: cover;
+            display: block;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .remove-image-btn:hover {
+            background: rgba(220, 53, 69, 1);
+            transform: scale(1.1);
+        }
+
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-container.dragover {
+            transform: scale(1.02);
+        }
+
+        /* Payment Settings */
+        .payment-settings {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .payment-option-switch {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        .payment-option-switch:last-child {
+            border-bottom: none;
+        }
+
+        /* Search and Filter */
+        .search-filter-container {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            border: 2px solid #333;
+        }
+
+        /* Order Status Badges */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-waiting { background: #6c757d; color: white; }
+        .status-process { background: var(--warning); color: black; }
+        .status-ready { background: var(--info); color: white; }
+        .status-delivered { background: var(--success); color: white; }
+        .status-cancelled { background: #dc3545; color: white; }
+
+        /* FIX RECEIPT TEXT COLORS */
+        .receipt-container {
+            background: white !important;
+            color: #000000 !important;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #333;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* FORCE ALL TEXT INSIDE RECEIPT TO BE BLACK WITH HIGH SPECIFICITY */
+        .receipt-container,
+        .receipt-container *:not(.btn):not(.btn *):not(.status-badge):not(.status-badge *) {
+            color: #000000 !important;
+        }
+
+        .receipt-container h1,
+        .receipt-container h2, 
+        .receipt-container h3,
+        .receipt-container h4,
+        .receipt-container h5,
+        .receipt-container h6,
+        .receipt-container p,
+        .receipt-container span,
+        .receipt-container div:not(.btn):not(.status-badge),
+        .receipt-container strong,
+        .receipt-container small,
+        .receipt-container label {
+            color: #000000 !important;
+        }
+
+        /* Keep status badges and buttons their original colors */
+        .receipt-container .status-badge,
+        .receipt-container .btn {
+            color: inherit !important;
+        }
+
+        .receipt-container .status-badge *,
+        .receipt-container .btn * {
+            color: inherit !important;
+        }
+
+        .receipt-container * {
+            color: #000000 !important;
+        }
+
+        .receipt-header,
+        .receipt-header h4,
+        .receipt-header p,
+        .receipt-header small {
+            color: #000000 !important;
+        }
+
+        .receipt-item,
+        .receipt-item span {
+            color: #000000 !important;
+        }
+
+        .receipt-total,
+        .receipt-total .receipt-item,
+        .receipt-total .receipt-item span {
+            color: #000000 !important;
+            font-weight: bold;
+        }
+
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            color: #000000 !important;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #000000 !important;
+        }
+
+        .receipt-total {
+            border-top: 2px solid #333;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #000000 !important;
+        }
+        /* Proof of Payment Image */
+        .proof-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 2px solid var(--yellow);
+            margin: 10px 0;
+        }
+
+        /* Order Type Settings */
+        .order-type-settings {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .order-type-switch {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        .order-type-switch:last-child {
+            border-bottom: none;
+        }
+
+        /* Notification System */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: rgb(255, 255, 255);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-link .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-item {
+            border-left: 4px solid var(--yellow);
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .notification-item h6,
+        .notification-item p,
+        .notification-item .notification-time {
+            color: #ffffff !important;
+        }
+
+        /* Client logout modal text color */
+        .modal-body p {
+            color: #ffffff !important;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #cccccc !important;
+        }
+        
+        /* MOBILE RESPONSIVE IMPROVEMENTS */
+        @media (max-width: 768px) {
+            /* Prevent horizontal scroll */
+            body {
+                overflow-x: hidden;
+            }
+            
+            /* Make containers full width */
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            /* Stack order status buttons */
+            .order-status-buttons {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            
+            .order-status-buttons .btn {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            /* Stack product actions */
+            .product-actions {
+                flex-direction: column !important;
+            }
+            
+            .product-actions .btn {
+                width: 100% !important;
+                margin-bottom: 8px !important;
+            }
+            
+            /* Make tables scrollable */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Adjust font sizes */
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .product-title {
+                font-size: 1rem;
+            }
+            
+            /* Stack forms */
+            .row > [class*='col-'] {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            /* Make modals scrollable */
+            .modal-dialog {
+                margin: 10px;
+                max-width: calc(100% - 20px);
+            }
+            
+            .modal-body {
+                max-height: 70vh;
+                overflow-y: auto;
+            }
+            
+            /* Fix navigation */
+            .navbar-nav {
+                padding: 10px 0;
+            }
+            
+            .nav-link {
+                padding: 10px 15px !important;
+                margin: 5px 0 !important;
+                text-align: left;
+            }
+            
+            /* Fix notification panel */
+            .notification-panel {
+                width: 95vw !important;
+                right: 2.5vw !important;
+                left: 2.5vw !important;
+            }
+            
+            /* Fix checkout sections */
+            .checkout-section {
+                padding: 15px;
+            }
+            
+            /* Fix payment options */
+            .payment-option,
+            .order-type-option {
+                margin-bottom: 15px;
+            }
+            
+            /* Adjust image previews */
+            .proof-image,
+            .upload-preview {
+                max-width: 100% !important;
+            }
+            
+            /* Fix freedom wall */
+            .freedom-wall {
+                width: 90vw !important;
+                right: 5vw !important;
+                height: 60vh !important;
+            }
+            
+            /* Fix order details */
+            .order-details-card {
+                padding: 15px;
+            }
+            
+            /* Fix cart summary */
+            .cart-summary {
+                position: static !important;
+                margin-top: 20px;
+            }
+            
+            /* Touch-friendly buttons */
+            .btn {
+                min-height: 44px;
+                padding: 10px 15px;
+            }
+            
+            /* Fix status badges */
+            .order-status-badge,
+            .status-badge {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 576px) {
+            .page-header h2 {
+                font-size: 1.25rem;
+            }
+            
+            .product-card {
+                margin-bottom: 15px;
+            }
+            
+            .admin-stats h3 {
+                font-size: 1.5rem;
+            }
+            
+            /* Single column layout */
+            .col-md-6,
+            .col-md-4,
+            .col-md-3 {
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Client Ready Notification */
+        .client-ready-notification {
+            background: rgba(40, 167, 69, 0.15);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: rgb(255, 255, 255) !important;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                text-align: center;
+                padding: 10px 0;
+            }
+            
+            .nav-link {
+                margin: 5px 0;
+                display: block;
+            }
+            
+            .nav-link.active::after {
+                display: none;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .product-actions .btn {
+                margin-bottom: 5px;
+                width: 100%;
+            }
+            
+            .order-status-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .order-status-buttons .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+        /* Freedom Wall Styles */
+        .freedom-wall-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        .sticky-note-btn {
+            background: var(--yellow);
+            color: var(--black);
+            border: none;
+            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transform: rotate(-4deg);
+            transition: all 0.4s ease;
+        }
+
+        .sticky-note-btn small {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .sticky-note-btn:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+        }
+
+        .freedom-wall {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--yellow);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1100;
+            border: 3px solid var(--black);
+        }
+
+        .freedom-wall.active {
+            display: flex;
+        }
+
+        .fw-header {
+            background: var(--black);
+            color: var(--yellow);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .fw-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: black;
+        }
+
+        .fw-message {
+            background: var(--light-yellow);
+            margin-bottom: 10px;
+            color:#000000;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid var(--yellow);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .fw-form {
+            padding: 15px;
+            background: var(--black);
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Order Status Navigation - NEW */
+        .order-status-nav {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .status-nav-btn {
+            position: relative;
+            background: #333;
+            border: 2px solid #555;
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .status-nav-btn:hover,
+        .status-nav-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
+        }
+
+        .status-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .status-waiting .status-count { background: #6c757d; }
+        .status-process .status-count { background: var(--warning); color: black; }
+        .status-ready .status-count { background: var(--info); }
+        .status-delivered .status-count { background: var(--success); } /* CHANGED TO GREEN */
+
+        /* Special Instructions Styling - NEW */
+        .special-instructions {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--yellow);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .special-instructions h6 {
+            color: var(--yellow);
+            margin-bottom: 8px;
+        }
+
+        /* Message System Styling - NEW */
+        .message-container {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.admin {
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 4px solid var(--yellow);
+            margin-left: auto;
+        }
+
+        .message.client {
+            background: rgba(23, 162, 184, 0.2);
+            border-left: 4px solid var(--info);
+            margin-right: auto;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Dashboard User Overview */
+        .user-overview-card {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--black);
+            font-weight: bold;
+        }
+
+        /* Mark All as Read Button */
+        .mark-all-read-btn {
+            background: var(--yellow);
+            color: var(--black);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mark-all-read-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* Logout Confirmation Text Color - FIXED */
+        .logout-confirmation-text {
+            color: #ff0000 !important; /* RED color */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-crown me-2"></i>KainMami Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showPage('home')">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link position-relative" href="#" onclick="showPage('orders')">
+                            <i class="fas fa-receipt me-1"></i> Orders
+                            <span class="notification-badge" id="orderNotificationBadge" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('menu')">
+                            <i class="fas fa-utensils me-1"></i> Menu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('analytics')">
+                            <i class="fas fa-chart-bar me-1"></i> Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link position-relative" href="#" onclick="showPage('notifications')">
+                            <i class="fas fa-bell me-1"></i> Notifications
+                            <span class="notification-badge" id="adminNotificationBadge" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('account')">
+                            <i class="fas fa-user me-1"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout()">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="container">
+        <div class="row justify-content-center" style="margin-top: 100px;">
+            <div class="col-md-5">
+                <div class="card shadow-lg border-secondary">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-crown fa-3x text-warning mb-3"></i>
+                            <h3 class="fw-bold text-warning">Admin Portal</h3>
+                            <p class="text-muted">KainMami Management System</p>
+                        </div>
+                        
+                        <form id="loginForm">
+                            <h5 class="mb-4 text-center text-warning">Admin Login</h5>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="loginUsername" required placeholder="Enter admin username">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Password</label>
+                                <div class="password-input-group">
+                                    <input type="password" class="form-control form-control-lg" id="loginPassword" required placeholder="Enter admin password">
+                                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">Login to Admin Panel</button>
+                        </form>
+                        <div class="text-center">
+                            <small class="text-muted">Note: Only admin accounts can access this panel</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="container">
+        <!-- Dashboard Page -->
+        <div id="homePage" class="page">
+            <div class="page-header">
+                <h2><i class="fas fa-home me-2"></i>Dashboard</h2>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h5 class="fw-bold mb-4 text-warning">Quick Actions</h5>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-primary w-100 btn-lg" onclick="showAddFoodModal()">
+                            <i class="fas fa-plus me-2"></i> Add Product
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-success w-100 btn-lg" onclick="showPage('menu')">
+                            <i class="fas fa-edit me-2"></i> Manage Products
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-warning w-100 btn-lg" onclick="showPage('orders')">
+                            <i class="fas fa-receipt me-2"></i> View Orders
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-info w-100 btn-lg" onclick="toggleOrderingSystem()" id="orderingToggleBtn">
+                            <i class="fas fa-power-off me-2"></i> <span id="orderingStatus">Turn Off</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-receipt fa-2x mb-2"></i>
+                        <h3 id="totalOrders">0</h3>
+                        <p class="text-muted">Total Orders</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-utensils fa-2x mb-2"></i>
+                        <h3 id="totalFoods">0</h3>
+                        <p class="text-muted">Menu Items</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-clock fa-2x mb-2"></i>
+                        <h3 id="pendingOrders">0</h3>
+                        <p class="text-muted">Pending Orders</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-stats">
+                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                        <h3 id="completedOrders">0</h3>
+                        <p class="text-muted">Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Overview Section - NEW -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-users me-2"></i> User Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="userOverview">
+                        <!-- User overview will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Status Overview - NEW -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-list-alt me-2"></i> Order Status Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="order-status-nav">
+                        <div class="d-flex flex-wrap justify-content-center">
+                            <button class="btn status-nav-btn status-waiting active" onclick="filterOrdersByStatus('waiting_approval')">
+                                Waiting Approval
+                                <span class="status-count" id="waitingCount">0</span>
+                            </button>
+                            <button class="btn status-nav-btn status-process" onclick="filterOrdersByStatus('in_process')">
+                                In Process
+                                <span class="status-count" id="processCount">0</span>
+                            </button>
+                            <button class="btn status-nav-btn status-ready" onclick="filterOrdersByStatus('ready')">
+                                Ready
+                                <span class="status-count" id="readyCount">0</span>
+                            </button>
+                            <button class="btn status-nav-btn" onclick="filterOrdersByStatus('delivered')">
+                                Delivered
+                                <span class="status-count" id="deliveredCount">0</span>
+                            </button>
+                            <button class="btn status-nav-btn status-cancelled" onclick="filterOrdersByStatus('cancelled')">
+                                Cancelled
+                                <span class="status-count" id="cancelledCount">0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Preview -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-utensils me-2"></i> Menu Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="category-filter text-center">
+                        <h5 class="fw-bold mb-4 text-warning">Browse Categories</h5>
+                        <div>
+                            <button class="btn category-btn active" onclick="filterCategory('', this)">All Items</button>
+                            <button class="btn category-btn" onclick="filterCategory('Breakfast', this)">🍳 Breakfast</button>
+                            <button class="btn category-btn" onclick="filterCategory('Lunch', this)">🍔 Lunch</button>
+                            <button class="btn category-btn" onclick="filterCategory('Snacks', this)">🍟 Snacks</button>
+                            <button class="btn category-btn" onclick="filterCategory('Dinner', this)">🍝 Dinner</button>
+                            <button class="btn category-btn" onclick="filterCategory('Dessert', this)">🍰 Dessert</button>
+                        </div>
+                    </div>
+                    <div id="foodsPreview" class="row"></div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-history me-2"></i> Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div id="recentOrders"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Page -->
+        <div id="ordersPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-receipt me-2"></i>Manage Orders</h2>
+            </div>
+            
+            <!-- Order Status Navigation - NEW -->
+            <div class="order-status-nav">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn status-nav-btn status-waiting active" onclick="filterOrdersByStatus('waiting_approval')">
+                        Waiting Approval
+                        <span class="status-count" id="ordersWaitingCount">0</span>
+                    </button>
+                    <button class="btn status-nav-btn status-process" onclick="filterOrdersByStatus('in_process')">
+                        In Process
+                        <span class="status-count" id="ordersProcessCount">0</span>
+                    </button>
+                    <button class="btn status-nav-btn status-ready" onclick="filterOrdersByStatus('ready')">
+                        Ready
+                        <span class="status-count" id="ordersReadyCount">0</span>
+                    </button>
+                    <button class="btn status-nav-btn" onclick="filterOrdersByStatus('delivered')">
+                        Delivered
+                        <span class="status-count" id="ordersDeliveredCount">0</span>
+                    </button>
+                    <button class="btn status-nav-btn status-cancelled" onclick="filterOrdersByStatus('cancelled')">
+                        Cancelled
+                        <span class="status-count" id="ordersCancelledCount">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex gap-2 flex-wrap">
+                    <input type="text" class="form-control" id="orderSearch" placeholder="Search orders..." style="width: 250px;">
+                </div>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+
+        <!-- Menu Management Page -->
+        <div id="menuPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-utensils me-2"></i>Menu Management</h2>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <button class="btn btn-success btn-lg" onclick="showAddFoodModal()">
+                    <i class="fas fa-plus me-2"></i> Add New Product
+                </button>
+                <button class="btn btn-danger btn-lg" onclick="showDeleteProductModal()">
+                    <i class="fas fa-trash-alt me-2"></i> Delete Products
+                </button>
+            </div>
+            
+            <div class="category-filter text-center mb-4">
+                <h5 class="fw-bold mb-4 text-warning">Filter by Category</h5>
+                <div>
+                    <button class="btn category-btn active" onclick="filterMenuCategory('', this)">All Items</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Breakfast', this)">🍳 Breakfast</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Lunch', this)">🍔 Lunch</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Snacks', this)">🍟 Snacks</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Dinner', this)">🍝 Dinner</button>
+                    <button class="btn category-btn" onclick="filterMenuCategory('Dessert', this)">🍰 Dessert</button>
+                </div>
+            </div>
+            
+            <div id="menuList" class="row"></div>
+        </div>
+        <!-- Analytics Page -->
+        <div id="analyticsPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-chart-bar me-2"></i>Sales Analytics</h2>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <select class="form-control" id="analyticsPeriod" onchange="loadAnalytics()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="admin-stats">
+                        <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                        <h3 id="totalRevenue">₱0.00</h3>
+                        <p class="text-muted">Total Revenue</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="admin-stats">
+                        <i class="fas fa-shopping-bag fa-2x mb-2"></i>
+                        <h3 id="totalSales">0</h3>
+                        <p class="text-muted">Total Sales</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="admin-stats">
+                        <i class="fas fa-utensil-spoon fa-2x mb-2"></i>
+                        <h3 id="popularItem">-</h3>
+                        <p class="text-muted">Most Popular Item</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning">Top Selling Items</h5>
+                </div>
+                <div class="card-body">
+                    <div id="topItemsList"></div>
+                </div>
+            </div>
+
+            <!-- ✅ FIX: MOVED RATINGS CARD INSIDE Analytics Page -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-warning"><i class="fas fa-star me-2"></i> Customer Ratings & Feedback</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="admin-stats">
+                                <i class="fas fa-star fa-2x mb-2"></i>
+                                <h3 id="averageRating">0.0</h3>
+                                <p class="text-muted">Average Rating</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="admin-stats">
+                                <i class="fas fa-comments fa-2x mb-2"></i>
+                                <h3 id="totalRatings">0</h3>
+                                <p class="text-muted">Total Ratings</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="admin-stats">
+                                <i class="fas fa-smile fa-2x mb-2"></i>
+                                <h3 id="positiveRatings">0%</h3>
+                                <p class="text-muted">Satisfaction Rate</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ratingsList">
+                        <!-- Ratings will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Notifications Page -->
+        <div id="notificationsPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-bell me-2"></i>Notifications</h2>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-warning">System Notifications</h5>
+                    <button class="btn mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                        <i class="fas fa-check-double me-1"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <button class="btn btn-primary" onclick="sendReadyNotifications()">
+                            <i class="fas fa-bell me-2"></i> Send Ready Notifications
+                        </button>
+                        <small class="text-muted ms-2">Send notifications to customers with ready orders</small>
+                    </div>
+                    <div id="notificationsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Page -->
+        <div id="accountPage" class="page" style="display:none;">
+            <div class="page-header">
+                <h2><i class="fas fa-user-circle me-2"></i>Account Settings</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body p-4">
+                            <form id="accountForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control" id="accountUsername" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Full Name</label>
+                                    <input type="text" class="form-control" id="accountName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="tel" class="form-control" id="accountPhone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">New Password (leave blank to keep current)</label>
+                                    <div class="password-input-group">
+                                        <input type="password" class="form-control" id="accountPassword" placeholder="Enter new password">
+                                        <button type="button" class="password-toggle" onclick="togglePassword('accountPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 btn-lg">
+                                    <i class="fas fa-save me-2"></i> Update Account
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-warning mb-4">System Settings</h5>
+                            
+                            <!-- Payment Settings -->
+                            <div class="payment-settings mb-4">
+                                <h6 class="fw-bold text-warning mb-3">Payment Methods</h6>
+                                <div class="payment-option-switch">
+                                    <div>
+                                        <i class="fas fa-mobile-alt me-2 text-warning"></i>
+                                        <span class="fw-semibold">GCash</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="gcashEnabled" checked onchange="updatePaymentMethod('gcash', this.checked)">
+                                    </div>
+                                </div>
+                                <div class="payment-option-switch">
+                                    <div>
+                                        <i class="fas fa-wallet me-2 text-warning"></i>
+                                        <span class="fw-semibold">PayMaya</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="paymayaEnabled" checked onchange="updatePaymentMethod('paymaya', this.checked)">
+                                    </div>
+                                </div>
+                                <div class="payment-option-switch">
+                                    <div>
+                                        <i class="fas fa-money-bill-wave me-2 text-warning"></i>
+                                        <span class="fw-semibold">Cash</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="cashEnabled" checked onchange="updatePaymentMethod('cash', this.checked)">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label">Minimum Online Order for Cash Payment</label>
+                                    <input type="number" class="form-control" id="cashMinOrders" min="0" value="3" onchange="updateCashMinOrders(this.value)">
+                                    <small class="text-muted">Number of completed online payments required before customers can use cash</small>
+                                </div>
+                            </div>
+
+                            <!-- Order Type Settings -->
+                            <div class="order-type-settings mb-4">
+                                <h6 class="fw-bold text-warning mb-3">Order Types</h6>
+                                <div class="order-type-switch">
+                                    <div>
+                                        <i class="fas fa-truck me-2 text-warning"></i>
+                                        <span class="fw-semibold">Delivery</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="deliveryEnabled" checked onchange="updateOrderType('delivery', this.checked)">
+                                    </div>
+                                </div>
+                                <div class="order-type-switch">
+                                    <div>
+                                        <i class="fas fa-store me-2 text-warning"></i>
+                                        <span class="fw-semibold">Self Pickup</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="pickupEnabled" checked onchange="updateOrderType('pickup', this.checked)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-3">
+                                <button class="btn btn-info btn-lg" onclick="toggleOrderingSystem()">
+                                    <i class="fas fa-power-off me-2"></i> 
+                                    <span id="systemStatusText">Turn Off Ordering System</span>
+                                </button>
+                                <button class="btn btn-warning btn-lg" onclick="showPage('menu')">
+                                    <i class="fas fa-edit me-2"></i> Manage Products
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Modal -->
+    <div class="modal fade" id="foodModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning" id="foodModalTitle">Add New Food Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="foodForm">
+                        <input type="hidden" id="foodId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="foodName" required placeholder="Enter product name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" id="foodCategory" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Breakfast">Breakfast</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="Snacks">Snacks</option>
+                                        <option value="Dinner">Dinner</option>
+                                        <option value="Dessert">Dessert</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Price</label>
+                                    <input type="number" step="0.01" class="form-control" id="foodPrice" required placeholder="Enter price">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Product Image</label>
+                                        
+                                        <!-- File Upload Option -->
+                                        <div class="file-upload-container mb-3" id="fileUploadContainer" onclick="document.getElementById('imageFile').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-2x text-warning mb-2"></i>
+                                            <p class="mb-1">Click to upload or drag & drop</p>
+                                            <small class="text-muted">PNG, JPG, JPEG up to 5MB</small>
+                                            <input type="file" id="imageFile" accept="image/*" style="display: none" onchange="handleImageUpload(this.files)">
+                                        </div>
+                                        
+                                        <!-- OR separator -->
+                                        <div class="text-center mb-3">
+                                            <small class="text-muted">- OR -</small>
+                                        </div>
+                                        
+                                        <!-- URL Input Option -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Image URL</label>
+                                            <input type="text" class="form-control" id="foodImage" placeholder="https://example.com/image.jpg" oninput="previewImage(this.value)">
+                                        </div>
+                                        
+                                        <!-- Image Preview - FIXED CONTAINER -->
+                                        <div id="imagePreview" class="mt-2 text-center" style="display: none;">
+                                            <div class="upload-preview-container" style="position: relative; display: inline-block;">
+                                                <img id="previewImage" src="" class="img-fluid rounded border" style="max-width: 200px; max-height: 150px; object-fit: cover;">
+                                                <button type="button" class="btn btn-sm btn-danger remove-image-btn" onclick="clearImage()" style="position: absolute; top: 5px; right: 5px; background: rgba(220, 53, 69, 0.9); border: none; border-radius: 50%; width: 25px; height: 25px; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="mt-1">
+                                                <small class="text-success" id="imageStatus">✓ Image loaded successfully</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" id="foodDescription" rows="4" placeholder="Enter product description"></textarea>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="foodAvailable" checked>
+                                    <label class="form-check-label">Available for ordering</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg" id="foodSubmitBtn">
+                            <i class="fas fa-save me-2"></i> Save Product
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Product Modal -->
+    <div class="modal fade" id="deleteProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Delete Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Product to Delete</label>
+                        <select class="form-control" id="deleteFoodSelect">
+                            <option value="">Select a product...</option>
+                        </select>
+                    </div>
+                    <div id="deleteProductPreview" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteSelectedFood()">Delete Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal fade" id="receiptModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Order Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="receiptContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="printReceipt()">Print Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="logout-confirmation-text">Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Follow Up Modal -->
+    <div class="modal fade" id="followUpModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Follow Up with Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Customer</label>
+                        <input type="text" class="form-control" id="followUpCustomer" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order Type</label>
+                        <input type="text" class="form-control" id="followUpOrderType" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <select class="form-control" id="followUpMessage">
+                            <option value="Your order is ready for pickup! Please come to the store to collect your order.">Ready for Pickup</option>
+                            <option value="Your order is about to be delivered! Please be ready to receive your order.">About to be Delivered</option>
+                            <option value="Just checking if you've received your order. Please confirm delivery.">Delivery Confirmation</option>
+                            <option value="custom">Custom Message</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="customMessageContainer" style="display: none;">
+                        <label class="form-label">Custom Message</label>
+                        <textarea class="form-control" id="customMessage" rows="3" placeholder="Enter your custom message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="sendFollowUp()">Send Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal - NEW -->
+    <div class="modal fade" id="messageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Order Messages - <span id="messageOrderId"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="message-container" id="messageContainer">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                    <div class="mt-3">
+                        <div class="mb-2">
+                            <label class="form-label">Upload Image (Optional)</label>
+                            <input type="file" class="form-control" id="messageImage" accept="image/*">
+                        </div>
+                        <textarea class="form-control" id="newMessage" rows="3" placeholder="Type your message here..."></textarea>
+                        <button class="btn btn-primary mt-2 w-100" onclick="sendMessage()">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Freedom Wall Container -->
+    <div class="freedom-wall-container">
+        <!-- Sticky Note Button -->
+        <button class="sticky-note-btn" id="stickyNoteBtn" aria-label="Freedom Wall">
+            <i class="fas fa-comments"></i>
+            <small>Freedom Wall</small>
+        </button>
+
+        <!-- Freedom Wall -->
+        <div id="freedomWall" class="freedom-wall">
+            <div class="fw-header">
+                <span><i class="fas fa-comment-dots me-2"></i>Freedom Wall</span>
+                <button class="btn btn-sm btn-outline-warning" id="closeFreedomWall">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="fw-messages" id="freedomMessages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="fw-form">
+                <textarea id="freedomInput" maxlength="100" placeholder="Share your thoughts..." class="form-control mb-2" rows="3"></textarea>
+                <button onclick="submitFreedomNote()" class="btn btn-warning btn-sm w-100">Post to Wall</button>
+            </div>
+        </div>
+    </div>
+    <!-- ============ ADD USER DETAILS MODAL RIGHT HERE ============ -->
+    <!-- User Details Modal -->
+    <div class="modal fade" id="userDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetailsContent">
+                        <!-- User details will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============ END OF USER DETAILS MODAL ============ -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = '/api';
+        let token = null;
+        let currentUser = null; 
+        let currentCategory = '';
+        let foodModal;
+        let deleteProductModal;
+        let receiptModal;
+        let logoutModal;
+        let followUpModal;
+        let messageModal;
+        let currentImageFile = null;
+        let isOrderingEnabled = true;
+        let currentPage = 'home';
+        let paymentMethods = {
+            gcash: true,
+            paymaya: true,
+            cash: true
+        };
+        let orderTypes = {
+            delivery: true,
+            pickup: true
+        };
+        let cashMinOrders = 3;
+        let currentFollowUpOrder = null;
+        let currentMessageOrder = null;
+        let currentOrderStatusFilter = 'waiting_approval';
+        
+        async function loadRatings() {
+            try {
+                console.log('📊 Loading ratings data...');
+                const ratings = await apiCall(`${API_BASE}/ratings`);
+                console.log('📊 Ratings data:', ratings);
+                
+                // Update stats
+                const averageRating = ratings.average_rating || 0;
+                const totalRatings = ratings.total_ratings || 0;
+                
+                document.getElementById('averageRating').textContent = averageRating.toFixed(1);
+                document.getElementById('totalRatings').textContent = totalRatings;
+                
+                // Calculate satisfaction rate (percentage of 4-5 star ratings)
+                const positiveRatings = ratings.ratings ? ratings.ratings.filter(r => r.rating >= 4).length : 0;
+                const satisfactionRate = totalRatings > 0 ? 
+                    Math.round((positiveRatings / totalRatings) * 100) : 0;
+                document.getElementById('positiveRatings').textContent = satisfactionRate + '%';
+                
+                // Display ratings list
+                const ratingsContainer = document.getElementById('ratingsList');
+                if (!ratings.ratings || ratings.ratings.length === 0) {
+                    ratingsContainer.innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-star fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No ratings yet</h5>
+                            <p class="text-muted">Customer ratings will appear here</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const html = ratings.ratings.map(rating => `
+                    <div class="card product-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold text-warning">Order #${rating.order_id}</h6>
+                                    <p class="mb-1">Customer: ${rating.user_name}</p>
+                                </div>
+                                <div class="text-warning">
+                                    ${'★'.repeat(rating.rating)}${'☆'.repeat(5 - rating.rating)}
+                                    <span class="ms-2 fw-bold">${rating.rating}.0</span>
+                                </div>
+                            </div>
+                            
+                            ${rating.comment ? `
+                                <div class="special-instructions">
+                                    <h6><i class="fas fa-comment me-1"></i>Customer Feedback</h6>
+                                    <p class="mb-0">${rating.comment}</p>
+                                </div>
+                            ` : '<p class="text-muted mb-2"><i>No comment provided</i></p>'}
+                            
+                            <div class="mt-2">
+                                <small class="text-muted">Rated on: ${rating.rated_at}</small>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                ratingsContainer.innerHTML = html;
+                
+            } catch (err) {
+                console.error('❌ Failed to load ratings:', err);
+                document.getElementById('ratingsList').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Failed to load ratings. Please try again.
+                    </div>
+                `;
+            }
+        }
+
+        // ADD this helper function
+        async function viewOrderDetails(orderId) {
+            showPage('orders');
+            // You might want to implement a function to scroll to or highlight the specific order
+            setTimeout(() => {
+                showToast(`Navigate to order #${orderId} in the orders list`, 'info');
+            }, 500);
+        }
+        // ============ PASSWORD TOGGLE FUNCTION ============
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.parentNode.querySelector('.password-toggle i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                toggle.className = 'fas fa-eye';
+            }
+        }
+                // ============ SESSION MANAGEMENT - PREVENT EXPIRY ============
+        function startTokenRefresh() {
+            // Refresh token every 15 minutes
+            setInterval(async () => {
+                if (token) {
+                    try {
+                        console.log('🔄 Refreshing token...');
+                        const response = await fetch(`${API_BASE}/refresh-token`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            token = data.token;
+                            
+                            // Update stored token based on current page
+                            if (window.location.pathname.includes('admin')) {
+                                localStorage.setItem('adminToken', token);
+                            } else {
+                                localStorage.setItem('clientToken', token);
+                            }
+                            
+                            console.log('✅ Token refreshed successfully');
+                        } else {
+                            console.log('⚠️ Token refresh failed, will retry');
+                        }
+                    } catch (err) {
+                        console.log('🔁 Token refresh error (normal if offline):', err.message);
+                    }
+                }
+            }, 15 * 60 * 1000); // 15 minutes
+        }
+
+        function startSessionHeartbeat() {
+            setInterval(() => {
+                if (token) {
+                    // Just make a simple API call to keep session alive
+                    fetch(`${API_BASE}/account`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }).catch(() => {
+                        // Silent fail - it's just a heartbeat
+                    });
+                }
+            }, 5 * 60 * 1000); // 5 minutes
+        }
+
+        // ============ FREEDOM WALL FUNCTIONS ============
+        function initializeFreedomWall() {
+            const stickyNoteBtn = document.getElementById('stickyNoteBtn');
+            const freedomWall = document.getElementById('freedomWall');
+            const closeBtn = document.getElementById('closeFreedomWall');
+
+            stickyNoteBtn.addEventListener('click', () => {
+                freedomWall.classList.toggle('active');
+                loadFreedomWall();
+            });
+
+            closeBtn.addEventListener('click', () => {
+                freedomWall.classList.remove('active');
+            });
+
+            // Load initial messages
+            loadFreedomWall();
+        }
+
+        async function loadFreedomWall() {
+            try {
+                const response = await fetch(`${API_BASE}/freedom-wall`);
+                const posts = await response.json();
+                
+                const messagesContainer = document.getElementById('freedomMessages');
+                messagesContainer.innerHTML = '';
+                
+                if (posts.length === 0) {
+                    messagesContainer.innerHTML = '<p class="text-muted text-center">No messages yet. Be the first to post!</p>';
+                    return;
+                }
+                
+                posts.forEach(post => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'fw-message';
+                    messageDiv.innerHTML = `
+                        <div class="fw-bold">${post.user_name}</div>  <!-- This will show 'Administrator' or 'Anonymous' -->
+                        <div>${post.content}</div>
+                        <small class="text-muted">${post.created_at}</small>
+                    `;
+                    messagesContainer.appendChild(messageDiv);
+                });
+            } catch (err) {
+                console.error('Failed to load freedom wall:', err);
+            }
+        }
+
+        async function submitFreedomNote() {
+            const input = document.getElementById('freedomInput');
+            const content = input.value.trim();
+            
+            if (!content) {
+                showToast('Please enter a message', 'error');
+                return;
+            }
+            
+            if (!token) {
+                showToast('Please login to post', 'error');
+                return;
+            }
+            
+            try {
+                console.log('📝 Posting to freedom wall:', content);
+                
+                // FIX: Remove JSON.stringify
+                const response = await apiCall(`${API_BASE}/freedom-wall`, {
+                    method: 'POST',
+                    body: { content }  // REMOVED JSON.stringify
+                });
+                
+                input.value = '';
+                showToast('Message posted successfully!', 'success');
+                loadFreedomWall();
+            } catch (err) {
+                console.error('❌ Failed to post message:', err);
+                showToast('Failed to post message: ' + err.message, 'error');
+            }
+        }
+        // ============ PAYMENT METHODS MANAGEMENT ============
+        async function updatePaymentMethod(method, enabled) {
+            try {
+                paymentMethods[method] = enabled;
+                await apiCall(`${API_BASE}/payment-methods`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ [method]: enabled })
+                });
+                showToast(`${method.toUpperCase()} ${enabled ? 'enabled' : 'disabled'}`, 'success');
+            } catch (err) {
+                showToast('Failed to update payment method', 'error');
+            }
+        }
+
+        async function updateCashMinOrders(value) {
+            try {
+                cashMinOrders = parseInt(value);
+                console.log(`🔄 Updating cash min orders to: ${cashMinOrders}`);
+                
+                await apiCall(`${API_BASE}/payment-methods`, {
+                    method: 'PUT',
+                    body: { cash_min_orders: cashMinOrders }  // REMOVED JSON.stringify
+                });
+                
+                showToast('Cash payment requirements updated successfully!', 'success');
+            } catch (err) {
+                console.error('❌ Failed to update cash requirements:', err);
+                showToast('Failed to update cash requirements: ' + err.message, 'error');
+            }
+        }
+
+        // ============ ORDER TYPE MANAGEMENT ============
+        async function updateOrderType(type, enabled) {
+            try {
+                orderTypes[type] = enabled;
+                await apiCall(`${API_BASE}/order-types`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ [type]: enabled })
+                });
+                showToast(`${type === 'delivery' ? 'Delivery' : 'Pickup'} ${enabled ? 'enabled' : 'disabled'}`, 'success');
+                
+                document.getElementById(`${type}Enabled`).checked = enabled;
+            } catch (err) {
+                showToast('Failed to update order type', 'error');
+            }
+        }
+
+        async function loadPaymentMethods() {
+            try {
+                const response = await apiCall(`${API_BASE}/payment-methods`);
+                paymentMethods = response.methods;
+                orderTypes = response.order_types;
+                
+                // FIXED: Use backend value, don't default to 3
+                cashMinOrders = response.cash_min_orders !== undefined ? response.cash_min_orders : 0;
+                
+                document.getElementById('gcashEnabled').checked = paymentMethods.gcash;
+                document.getElementById('paymayaEnabled').checked = paymentMethods.paymaya;
+                document.getElementById('cashEnabled').checked = paymentMethods.cash;
+                document.getElementById('cashMinOrders').value = cashMinOrders; // Now uses backend value
+                document.getElementById('deliveryEnabled').checked = orderTypes.delivery;
+                document.getElementById('pickupEnabled').checked = orderTypes.pickup;
+            } catch (err) {
+                // FIXED: Default to 0 instead of 3 if API fails
+                cashMinOrders = 0;
+                document.getElementById('cashMinOrders').value = 0;
+            }
+        }
+
+        // ============ ROBUST API ERROR HANDLER ============
+        async function apiCall(url, options = {}) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
+            try {
+                console.log(`🔄 API Call: ${url}`, options.method || 'GET');
+                
+                const headers = {
+                    'Authorization': `Bearer ${token}`,
+                    ...options.headers
+                };
+                
+                let body = options.body;
+                
+                // ✅ FIXED: Handle body formatting properly
+                if (body && typeof body === 'object' && !(body instanceof FormData)) {
+                    headers['Content-Type'] = 'application/json';
+                    body = JSON.stringify(body);
+                }
+                
+                if (body instanceof FormData) {
+                    delete headers['Content-Type'];
+                }
+                
+                const response = await fetch(url, {
+                    ...options,
+                    headers,
+                    body,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    let errorData;
+                    const responseText = await response.text();
+                    
+                    try {
+                        errorData = JSON.parse(responseText);
+                    } catch {
+                        errorData = { 
+                            message: `Server error: ${response.status} ${response.statusText}`,
+                            details: responseText.substring(0, 200)
+                        };
+                    }
+                    
+                    // Enhanced error handling
+                    if (response.status === 401) {
+                        showToast('Session expired. Please login again.', 'error');
+                        setTimeout(() => {
+                            localStorage.removeItem('adminToken');
+                            localStorage.removeItem('clientToken');
+                            localStorage.removeItem('adminUser'); 
+                            localStorage.removeItem('clientUser');
+                            token = null;
+                            currentUser = null;
+                            
+                            if (window.location.pathname.includes('admin')) {
+                                document.getElementById('loginPage').style.display = 'block';
+                                document.getElementById('mainApp').style.display = 'none';
+                            } else {
+                                document.getElementById('loginPage').style.display = 'block';
+                                document.getElementById('mainApp').style.display = 'none';
+                            }
+                        }, 3000);
+                        
+                        throw new Error('Session expired. Please login again.');
+                    } else if (response.status === 400) {
+                        throw new Error(errorData.message || 'Invalid request data');
+                    } else if (response.status === 413) {
+                        throw new Error('File too large. Maximum size is 5MB.');
+                    } else if (response.status === 429) {
+                        throw new Error('Too many requests. Please wait a moment.');
+                    } else if (response.status === 500) {
+                        throw new Error('Server error. Please try again later.');
+                    } else {
+                        throw new Error(errorData.message || `Request failed with status ${response.status}`);
+                    }
+                }
+                
+                // Handle empty responses
+                const contentLength = response.headers.get('content-length');
+                if (contentLength === '0' || !contentLength) {
+                    return { message: 'Success' };
+                }
+                
+                const data = await response.json();
+                console.log(`✅ API Success: ${url}`);
+                return data;
+                
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('❌ API Call failed:', error);
+                
+                if (error.name === 'AbortError') {
+                    showToast('Request timeout. Please check your connection.', 'error');
+                } else if (!error.message.includes('Session expired')) {
+                    showToast(error.message || 'An unexpected error occurred', 'error');
+                }
+                
+                throw error;
+            }
+        }
+
+
+        // ============ LOADING FUNCTIONS ============
+        function showLoading(show = true) {
+            const loader = document.getElementById('loadingOverlay');
+            if (loader) {
+                loader.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // ============ IMAGE UPLOAD FUNCTIONALITY ============
+        function handleImageUpload(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select a valid image file (PNG, JPG, JPEG, GIF)', 'error');
+                return;
+            }
+            
+            // Validate file size
+            if (file.size > maxSize) {
+                showToast('Image size must be less than 5MB', 'error');
+                return;
+            }
+            
+            currentImageFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewContainer = document.getElementById('imagePreview');
+                const previewImage = document.getElementById('previewImage');
+                const imageStatus = document.getElementById('imageStatus');
+                
+                // Set preview image
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                
+                // Update status
+                imageStatus.textContent = '✅ Image ready for upload';
+                imageStatus.className = 'text-success';
+                
+                // Show preview container
+                previewContainer.style.display = 'block';
+                
+                // Clear URL input
+                document.getElementById('foodImage').value = '';
+                
+                showToast('Image loaded successfully! It will be uploaded when you save the product.', 'success');
+            };
+            
+            reader.onerror = function() {
+                showToast('Failed to load image file', 'error');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+
+        function clearImage() {
+            currentImageFile = null;
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('foodImage').value = '';
+            document.getElementById('imageFile').value = '';
+        }
+
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Image upload failed');
+                }
+                
+                const data = await response.json();
+                return data.image_url;
+            } catch (error) {
+                console.error('Upload failed:', error);
+                throw new Error('Failed to upload image. Please try again or use image URL instead.');
+            }
+        }
+
+        // ============ IMAGE PREVIEW FUNCTIONALITY ============
+        function previewImage(imageUrl) {
+            const previewContainer = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const imageStatus = document.getElementById('imageStatus');
+            
+            if (!imageUrl.trim()) {
+                previewContainer.style.display = 'none';
+                return;
+            }
+            
+            currentImageFile = null;
+            document.getElementById('imageFile').value = '';
+            
+            previewContainer.style.display = 'block';
+            previewImage.src = '';
+            imageStatus.textContent = '🔄 Loading image...';
+            imageStatus.className = 'text-warning';
+            
+            const img = new Image();
+            img.onload = function() {
+                previewImage.src = imageUrl;
+                imageStatus.textContent = '✅ Image loaded successfully';
+                imageStatus.className = 'text-success';
+            };
+            img.onerror = function() {
+                previewImage.src = '';
+                imageStatus.textContent = '❌ Image failed to load. Check URL format.';
+                imageStatus.className = 'text-danger';
+            };
+            img.src = imageUrl;
+        }
+
+        // ============ DRAG AND DROP ============
+        function initializeDragAndDrop() {
+            const uploadContainer = document.getElementById('fileUploadContainer');
+            
+            uploadContainer.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            uploadContainer.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+            
+            uploadContainer.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleImageUpload(files);
+                }
+            });
+        }
+        // ============  STATE MANAGEMENT FUNCTIONS ============
+        function cleanupImageUploads() {
+            console.log('🧹 Cleaning up image uploads...');
+            
+            // Reset global variables
+            if (typeof currentImageFile !== 'undefined') currentImageFile = null;
+            if (typeof currentProofFiles !== 'undefined') {
+                currentProofFiles = { gcash: null, paymaya: null };
+            }
+            
+            // Reset all file inputs
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Hide all previews
+            document.querySelectorAll('.upload-preview').forEach(preview => {
+                preview.style.display = 'none';
+                preview.src = '';
+            });
+            
+            // Remove all remove buttons
+            document.querySelectorAll('.remove-image-btn').forEach(btn => {
+                btn.remove();
+            });
+            
+            // Reset upload containers
+            document.querySelectorAll('.file-upload-container').forEach(container => {
+                container.classList.remove('required', 'dragover');
+            });
+        }
+
+        function initializeCleanupHandlers() {
+            console.log('🔧 Initializing cleanup handlers...');
+            
+            // Clean up when food modal closes
+            const foodModal = document.getElementById('foodModal');
+            if (foodModal) {
+                foodModal.addEventListener('hidden.bs.modal', function () {
+                    cleanupImageUploads();
+                });
+            }
+            
+            // Clean up on form resets
+            const forms = ['foodForm', 'accountForm'];
+            forms.forEach(formId => {
+                const form = document.getElementById(formId);
+                if (form) {
+                    form.addEventListener('reset', cleanupImageUploads);
+                }
+            });
+        }
+        // ============ AUTHENTICATION ============
+        window.addEventListener('DOMContentLoaded', () => {
+            token = localStorage.getItem('adminToken');
+            const adminUserData = localStorage.getItem('adminUser');
+            if (adminUserData) {
+                currentUser = JSON.parse(adminUserData);
+                console.log('👑 Admin user initialized:', currentUser);
+            }
+            foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+            deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
+            receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+            logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            followUpModal = new bootstrap.Modal(document.getElementById('followUpModal'));
+            messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            initializeDragAndDrop();
+            initializeFreedomWall();
+
+            
+            document.getElementById('orderSearch')?.addEventListener('input', loadOrders);
+            document.getElementById('followUpMessage')?.addEventListener('change', function() {
+                document.getElementById('customMessageContainer').style.display = 
+                    this.value === 'custom' ? 'block' : 'none';
+            });
+
+            initializeCleanupHandlers();
+            initializeDragAndDrop();
+            
+            if (token) {
+                document.getElementById('mainApp').style.display = 'block';
+                loadDashboard();
+                checkOrderingStatus();
+                loadPaymentMethods();
+                loadNotifications();
+                
+                // ✅ ADD THESE TWO LINES:
+                startTokenRefresh();
+                startSessionHeartbeat();
+                
+                startOptimizedAutoRefresh();
+            } else {
+                document.getElementById('loginPage').style.display = 'block';
+            }
+        });
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const data = await apiCall(`${API_BASE}/login`, {
+                    method: 'POST',
+                    body: { username, password }  // ✅ This will now be properly stringified
+                });
+                
+                if (data.user.role === 'admin') {
+                    token = data.token;
+                    localStorage.setItem('adminToken', token);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    loadDashboard();
+                    checkOrderingStatus();
+                    loadPaymentMethods();
+                    loadNotifications();
+                    showToast('Admin login successful!', 'success');
+                } else {
+                    showToast('Admin access required. Please use an admin account.', 'error');
+                }
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        });
+
+        function confirmLogout() {
+            logoutModal.show();
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            token = null;
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            logoutModal.hide();
+            showToast('Logged out successfully', 'success');
+        }
+
+        // ============ PAGE NAVIGATION ============
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page + 'Page').style.display = 'block';
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`a[onclick="showPage('${page}')"]`).classList.add('active');
+            
+            currentPage = page;
+
+            if (page === 'home') loadDashboard();
+            else if (page === 'orders') loadOrders();
+            else if (page === 'menu') loadMenu();
+            else if (page === 'analytics') loadAnalytics();
+            else if (page === 'notifications') loadNotifications();
+            else if (page === 'account') loadAccount();
+        }
+
+        // ============ ORDERING SYSTEM TOGGLE ============
+        async function toggleOrderingSystem() {
+            const newStatus = !isOrderingEnabled;
+            
+            try {
+                console.log(`🔄 Toggling ordering system to: ${newStatus}`);
+                
+                const response = await apiCall(`${API_BASE}/system/ordering`, {
+                    method: 'PUT',
+                    body: { enabled: newStatus }
+                });
+                
+                isOrderingEnabled = newStatus;
+                const statusText = isOrderingEnabled ? 'ON' : 'OFF';
+                const buttonText = isOrderingEnabled ? 'Turn Off' : 'Turn On';
+                
+                document.getElementById('orderingStatus').textContent = buttonText;
+                document.getElementById('systemStatusText').textContent = isOrderingEnabled ? 
+                    'Turn Off Ordering System' : 'Turn On Ordering System';
+                
+                showToast(`Ordering system turned ${statusText}`, 'success');
+                
+            } catch (err) {
+                console.error('❌ Failed to toggle ordering system:', err);
+                showToast('Failed to update system status: ' + err.message, 'error');
+            }
+        }
+        async function checkOrderingStatus() {
+            try {
+                const status = await apiCall(`${API_BASE}/system/ordering`);
+                isOrderingEnabled = status.enabled;
+                
+                const buttonText = isOrderingEnabled ? 'Turn Off' : 'Turn On';
+                document.getElementById('orderingStatus').textContent = buttonText;
+                document.getElementById('systemStatusText').textContent = isOrderingEnabled ? 
+                    'Turn Off Ordering System' : 'Turn On Ordering System';
+            } catch (err) {
+                console.log('Could not fetch ordering status');
+            }
+        }
+
+        // ============ DASHBOARD ============
+        async function loadDashboard() {
+            showLoading(true);
+            try {
+                const [orders, foods, users] = await Promise.all([
+                    apiCall(`${API_BASE}/orders`),
+                    apiCall(`${API_BASE}/foods`),
+                    apiCall(`${API_BASE}/users`)
+                ]);
+
+                document.getElementById('totalOrders').textContent = orders.length;
+                document.getElementById('totalFoods').textContent = foods.length;
+                
+                const pendingOrders = orders.filter(o => o.status === 'in_process').length;
+                document.getElementById('pendingOrders').textContent = pendingOrders;
+                document.getElementById('completedOrders').textContent = orders.filter(o => o.status === 'delivered').length;
+
+                // NEW: Update order status counts
+                updateOrderStatusCounts(orders);
+
+                // NEW: Load user overview
+                loadUserOverview(users);
+
+                await loadFoodPreview();
+
+                const recentOrders = orders.slice(-5).reverse();
+                const recentHtml = recentOrders.map(o => `
+                    <div class="card product-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold">Order #${o.id} - ${o.user_name}</h6>
+                                    <small class="text-muted">${o.created_at}</small>
+                                </div>
+                                <span class="status-badge status-${o.status.replace('_', '')}">
+                                    ${o.status.toUpperCase().replace('_', ' ')}
+                                </span>
+                            </div>
+                            <p class="mb-1"><strong>Items:</strong> ${o.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                            <h6 class="text-warning fw-bold mb-0">Total: ₱${o.total_price.toFixed(2)}</h6>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewReceipt(${o.id})">
+                                    <i class="fas fa-receipt me-1"></i> View Receipt
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('recentOrders').innerHTML = recentHtml || '<p class="text-muted">No recent orders</p>';
+
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // NEW: Load user overview
+        async function loadUserOverview(users) {
+            const userOverview = document.getElementById('userOverview');
+            
+            if (!users || users.length === 0) {
+                userOverview.innerHTML = '<p class="text-muted">No users found</p>';
+                return;
+            }
+
+            // Filter out admin users for client overview
+            const clientUsers = users.filter(user => user.role === 'client');
+            
+            // Calculate real statistics
+            let totalOrdersCount = 0;
+            let totalRating = 0;
+            let ratingCount = 0;
+            
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                totalOrdersCount = orders.length;
+                
+                // Calculate average rating from rated orders
+                const ratedOrders = orders.filter(order => order.rated && order.rating);
+                ratingCount = ratedOrders.length;
+                totalRating = ratedOrders.reduce((sum, order) => sum + order.rating, 0);
+            } catch (err) {
+                console.log('Could not load orders for statistics');
+            }
+            
+            const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
+
+            const html = `
+                <div class="col-md-4">
+                    <div class="user-overview-card text-center">
+                        <div class="user-avatar mx-auto mb-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-warning">${clientUsers.length}</h3>
+                        <p class="text-muted mb-0">Total Users</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="user-overview-card">
+                        <h6 class="text-warning mb-3">Recent Users</h6>
+                        ${clientUsers.slice(0, 3).map(user => `
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="user-avatar me-3">
+                                    ${user.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">${user.name}</div>
+                                    <small class="text-muted">${user.username}</small>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="user-overview-card">
+                        <h6 class="text-warning mb-3">User Activity</h6>
+                        <div class="mb-2">
+                            <small class="text-muted">Active today: </small>
+                            <span class="fw-bold text-warning">${clientUsers.length}</span>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Total orders: </small>
+                            <span class="fw-bold text-warning">${totalOrdersCount}</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">Avg. rating: </small>
+                            <span class="fw-bold text-warning">${averageRating}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            userOverview.innerHTML = html;
+        }
+
+        function updateOrderStatusCounts(orders) {
+            if (!orders) return;
+            
+            const waitingCount = orders.filter(o => o.status === 'waiting_approval').length;
+            const processCount = orders.filter(o => o.status === 'in_process').length;
+            const readyCount = orders.filter(o => o.status === 'ready').length;
+            const deliveredCount = orders.filter(o => o.status === 'delivered').length;
+            const cancelledCount = orders.filter(o => o.status === 'cancelled').length;
+
+            // Update dashboard counts
+            document.getElementById('pendingOrders').textContent = waitingCount + processCount;
+            document.getElementById('waitingCount').textContent = waitingCount;
+            document.getElementById('processCount').textContent = processCount;
+            document.getElementById('readyCount').textContent = readyCount;
+            document.getElementById('deliveredCount').textContent = deliveredCount;
+            document.getElementById('cancelledCount').textContent = cancelledCount;
+
+            // Update orders page counts
+            const ordersWaitingEl = document.getElementById('ordersWaitingCount');
+            const ordersProcessEl = document.getElementById('ordersProcessCount');
+            const ordersReadyEl = document.getElementById('ordersReadyCount');
+            const ordersDeliveredEl = document.getElementById('ordersDeliveredCount');
+            const ordersCancelledEl = document.getElementById('ordersCancelledCount');
+            
+            if (ordersWaitingEl) ordersWaitingEl.textContent = waitingCount;
+            if (ordersProcessEl) ordersProcessEl.textContent = processCount;
+            if (ordersReadyEl) ordersReadyEl.textContent = readyCount;
+            if (ordersDeliveredEl) ordersDeliveredEl.textContent = deliveredCount;
+            if (ordersCancelledEl) ordersCancelledEl.textContent = cancelledCount;
+        }
+        async function loadFoodPreview() {
+            try {
+                const foods = await apiCall(`${API_BASE}/foods?category=${currentCategory}`);
+                const previewFoods = foods.slice(0, 8);
+
+                const html = previewFoods.map(f => `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-card ${!f.is_available ? 'food-unavailable' : ''}">
+                            <img src="${f.image_url}" class="product-image" alt="${f.name}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                            <div class="product-content">
+                                <div class="product-category">${f.category}</div>
+                                <h3 class="product-title">${f.name}</h3>
+                                <p class="product-description">${f.description}</p>
+                                <div class="product-price">₱${f.price.toFixed(2)}</div>
+                                <div class="mb-2">
+                                    <span class="badge availability-badge ${f.is_available ? 'bg-success' : 'bg-danger'}">
+                                        ${f.is_available ? 'Available' : 'Unavailable'}
+                                    </span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-warning btn-sm" onclick="editFood(${f.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteFood(${f.id})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('foodsPreview').innerHTML = html || `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No food items found</h4>
+                        <button class="btn btn-primary mt-3" onclick="initializeSampleFoods()">
+                            <i class="fas fa-database me-2"></i> Load Sample Foods
+                        </button>
+                    </div>
+                `;
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        }
+
+        function filterCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            loadFoodPreview();
+        }
+
+        // NEW: Filter orders by status
+        function filterOrdersByStatus(status) {
+            currentOrderStatusFilter = status;
+            
+            // Update active button
+            document.querySelectorAll('.status-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            loadOrders();
+        }
+
+        // ============ MENU MANAGEMENT ============
+        function filterMenuCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            loadMenu();
+        }
+
+        async function loadMenu() {
+            showLoading(true);
+            try {
+                const foods = await apiCall(`${API_BASE}/foods`);
+
+                let filteredFoods = foods;
+                if (currentCategory) {
+                    filteredFoods = foods.filter(f => f.category === currentCategory);
+                }
+
+                if (filteredFoods.length === 0) {
+                    document.getElementById('menuList').innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No food items found</h4>
+                            <p class="text-muted mb-4">Add your first food item to get started!</p>
+                            <button class="btn btn-primary btn-lg" onclick="showAddFoodModal()">
+                                <i class="fas fa-plus me-2"></i> Add New Product
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const html = filteredFoods.map(f => `
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="product-card ${!f.is_available ? 'food-unavailable' : ''}">
+                            <img src="${f.image_url}" class="product-image" alt="${f.name}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                            <div class="product-content">
+                                <div class="product-category">${f.category}</div>
+                                <h3 class="product-title">${f.name}</h3>
+                                <p class="product-description">${f.description}</p>
+                                <div class="product-price">₱${f.price.toFixed(2)}</div>
+                                                                
+                                <div class="mb-2">
+                                    <span class="badge availability-badge ${f.is_available ? 'bg-success' : 'bg-danger'}">
+                                        <i class="fas ${f.is_available ? 'fa-check' : 'fa-times'} me-1"></i>
+                                        ${f.is_available ? 'Available' : 'Unavailable'}
+                                    </span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-warning btn-sm" onclick="editFood(${f.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteFood(${f.id})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    <button class="btn ${f.is_available ? 'btn-secondary' : 'btn-success'} btn-sm" onclick="toggleFoodAvailability(${f.id}, ${!f.is_available})">
+                                        <i class="fas ${f.is_available ? 'fa-eye-slash' : 'fa-eye'}"></i> ${f.is_available ? 'Hide' : 'Show'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('menuList').innerHTML = html;
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============ FOOD MODAL FUNCTIONS ============
+        function showAddFoodModal() {
+            document.getElementById('foodForm').reset();
+            document.getElementById('foodId').value = '';
+            document.getElementById('foodAvailable').checked = true;
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('foodModalTitle').textContent = 'Add New Food Item';
+            document.getElementById('foodSubmitBtn').innerHTML = '<i class="fas fa-save me-2"></i> Save Product';
+            currentImageFile = null;
+            foodModal.show();
+        }
+
+        async function editFood(id) {
+            showLoading(true);
+            try {
+                const food = await apiCall(`${API_BASE}/foods/${id}`);
+
+                document.getElementById('foodId').value = food.id;
+                document.getElementById('foodName').value = food.name;
+                document.getElementById('foodCategory').value = food.category;
+                document.getElementById('foodPrice').value = food.price;
+                document.getElementById('foodImage').value = food.image_url;
+                document.getElementById('foodDescription').value = food.description;
+                document.getElementById('foodAvailable').checked = food.is_available;
+                document.getElementById('foodModalTitle').textContent = 'Edit Food Item';
+                document.getElementById('foodSubmitBtn').innerHTML = '<i class="fas fa-save me-2"></i> Update Product';
+
+                if (food.image_url) {
+                    previewImage(food.image_url);
+                } else {
+                    document.getElementById('imagePreview').style.display = 'none';
+                }
+
+                foodModal.show();
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        document.getElementById('foodForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const foodId = document.getElementById('foodId').value;
+            const submitBtn = document.getElementById('foodSubmitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Saving...';
+            
+            try {
+                let imageUrl = document.getElementById('foodImage').value.trim();
+                
+                // Handle image upload if file is selected
+                if (currentImageFile) {
+                    console.log("🔄 Uploading image file...");
+                    const formData = new FormData();
+                    formData.append('image', currentImageFile);
+                    
+                    try {
+                        const uploadResponse = await fetch(`${API_BASE}/upload`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: formData
+                        });
+                        
+                        if (!uploadResponse.ok) {
+                            let errorMessage = 'Image upload failed';
+                            try {
+                                const errorData = await uploadResponse.json();
+                                errorMessage = errorData.message || errorMessage;
+                            } catch {
+                                errorMessage = `Upload failed with status: ${uploadResponse.status}`;
+                            }
+                            throw new Error(errorMessage);
+                        }
+                        
+                        const uploadResult = await uploadResponse.json();
+                        if (!uploadResult.image_url) {
+                            throw new Error('No image URL returned from server');
+                        }
+                        
+                        imageUrl = uploadResult.image_url;
+                        console.log("✅ Image uploaded:", imageUrl);
+                        
+                    } catch (uploadError) {
+                        console.error('❌ Upload failed:', uploadError);
+                        // If upload fails AND no URL provided, throw error
+                        if (!imageUrl) {
+                            throw new Error(`${uploadError.message}. Please try uploading again or provide an image URL.`);
+                        } else {
+                            // If upload fails BUT URL is provided, use URL and show warning
+                            console.log("⚠️ Upload failed, but using provided URL");
+                            showToast('Image upload failed. Using provided URL instead.', 'warning');
+                        }
+                    }
+                }
+                
+                // Validate required fields (image is optional)
+                const foodName = document.getElementById('foodName').value.trim();
+                const foodCategory = document.getElementById('foodCategory').value;
+                const foodPrice = document.getElementById('foodPrice').value;
+                
+                if (!foodName) {
+                    throw new Error('Product name is required');
+                }
+                if (!foodCategory) {
+                    throw new Error('Category is required');
+                }
+                if (!foodPrice || parseFloat(foodPrice) <= 0) {
+                    throw new Error('Valid price is required');
+                }
+
+                const foodData = {
+                    name: foodName,
+                    category: foodCategory,
+                    price: parseFloat(foodPrice),
+                    image_url: imageUrl || '', // Can be empty string
+                    description: document.getElementById('foodDescription').value,
+                    is_available: document.getElementById('foodAvailable').checked
+                };
+
+                console.log("🔄 Saving food data:", foodData);
+
+                const method = foodId ? 'PUT' : 'POST';
+                const url = foodId ? `${API_BASE}/foods/${foodId}` : `${API_BASE}/foods`;
+
+                // FIX: Remove JSON.stringify
+                const response = await apiCall(url, {
+                    method: method,
+                    body: foodData  // REMOVED JSON.stringify
+                });
+
+                console.log("✅ Food saved successfully");
+                foodModal.hide();
+                showToast(`Food ${foodId ? 'updated' : 'added'} successfully!`, 'success');
+                loadMenu();
+                loadDashboard();   
+
+                // Clean up image uploads after successful save
+                cleanupImageUploads();
+                
+            } catch (err) {
+                console.error('❌ Save food error:', err);
+                showToast(err.message || 'Failed to save product. Please check the form and try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+        // ============ FOOD ACTIONS ============
+        async function deleteFood(id) {
+            if (!confirm('Are you sure you want to delete this food item?')) return;
+
+            try {
+                await apiCall(`${API_BASE}/foods/${id}`, {
+                    method: 'DELETE'
+                });
+
+                showToast('Food item deleted!', 'success');
+                loadMenu();
+                loadDashboard();
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        }
+
+        async function toggleFoodAvailability(foodId, newStatus) {
+            try {
+                await apiCall(`${API_BASE}/foods/${foodId}/availability`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ is_available: newStatus })
+                });
+
+                showToast(`Food ${newStatus ? 'made available' : 'made unavailable'}!`, 'success');
+                loadMenu();
+                loadDashboard();
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        }
+
+        // ============ DELETE PRODUCT MODAL ============
+        async function showDeleteProductModal() {
+            try {
+                const foods = await apiCall(`${API_BASE}/foods`);
+
+                const select = document.getElementById('deleteFoodSelect');
+                select.innerHTML = '<option value="">Select a product...</option>';
+                
+                foods.forEach(food => {
+                    const option = document.createElement('option');
+                    option.value = food.id;
+                    option.textContent = `${food.name} - ₱${food.price.toFixed(2)} (${food.category})`;
+                    select.appendChild(option);
+                });
+
+                select.addEventListener('change', function() {
+                    const selectedFood = foods.find(f => f.id == this.value);
+                    if (selectedFood) {
+                        document.getElementById('deleteProductPreview').innerHTML = `
+                            <div class="card product-card">
+                                <div class="card-body text-center">
+                                    <img src="${selectedFood.image_url}" class="img-fluid rounded mb-2" style="height: 100px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100?text=No+Image'">
+                                    <h6 class="fw-bold">${selectedFood.name}</h6>
+                                    <p class="text-muted mb-1">${selectedFood.category}</p>
+                                    <p class="text-warning fw-bold">₱${selectedFood.price.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById('deleteProductPreview').innerHTML = '';
+                    }
+                });
+
+                deleteProductModal.show();
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        }
+
+        async function deleteSelectedFood() {
+            const foodId = document.getElementById('deleteFoodSelect').value;
+            if (!foodId) {
+                showToast('Please select a product to delete', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                await apiCall(`${API_BASE}/foods/${foodId}`, {
+                    method: 'DELETE'
+                });
+
+                showToast('Product deleted successfully!', 'success');
+                deleteProductModal.hide();
+                loadMenu();
+                loadDashboard();
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        }
+
+        // ============ ORDERS MANAGEMENT ============
+        async function loadOrders() {
+            showLoading(true);
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                
+                // NEW: Update order status counts
+                updateOrderStatusCounts(orders);
+                
+                let filteredOrders = orders;
+                const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
+                
+                if (searchTerm) {
+                    filteredOrders = filteredOrders.filter(o => 
+                        o.user_name.toLowerCase().includes(searchTerm) || 
+                        o.id.toString().includes(searchTerm) ||
+                        o.items.some(item => item.name.toLowerCase().includes(searchTerm))
+                    );
+                }
+                
+                // Filter by status
+                if (currentOrderStatusFilter) {
+                    filteredOrders = filteredOrders.filter(o => o.status === currentOrderStatusFilter);
+                }
+
+                if (filteredOrders.length === 0) {
+                    document.getElementById('ordersList').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-receipt fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No orders found</h4>
+                            <p class="text-muted">Try adjusting your search criteria</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const html = filteredOrders.reverse().map(o => `
+                    <div class="card product-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Order #${o.id} - ${o.user_name}</h5>
+                                    <small class="text-muted">${o.created_at}</small>
+                                </div>
+                                <span class="status-badge status-${o.status.replace('_', '')}">
+                                    ${o.status.toUpperCase().replace('_', ' ')}
+                                </span>
+                            </div>
+                            <p class="mb-2"><strong>Items:</strong> ${o.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
+                            <p class="mb-2"><strong>Order Type:</strong> ${o.order_type === 'delivery' ? 'Delivery' : 'Self Pickup'}</p>
+                            <p class="mb-2"><strong>Payment Method:</strong> ${o.payment_method ? o.payment_method.toUpperCase() : 'Cash'}</p>
+                            ${o.special_instructions ? `
+                                <div class="special-instructions">
+                                    <h6><i class="fas fa-sticky-note me-1"></i>Special Instructions</h6>
+                                    <p class="mb-0">${o.special_instructions}</p>
+                                </div>
+                            ` : ''}
+                            <h5 class="text-warning fw-bold mb-3">Total: ₱${o.total_price.toFixed(2)}</h5>
+                                                        
+                            <div class="order-actions mb-3">
+                                ${o.status === 'waiting_approval' ? `
+                                    <div class="d-flex flex-wrap gap-2 mb-3 p-3 bg-dark rounded">
+                                        <button class="btn btn-success btn-sm" onclick="approveOrder(${o.id})">
+                                            <i class="fas fa-check me-1"></i> Approve Order
+                                        </button>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="order-status-buttons d-flex flex-wrap gap-2">
+                                    <!-- REMOVED IN PROCESS BUTTON - Auto-handled on approval -->                                    
+                                    ${(o.status === 'in_process' || o.status === 'ready') ? `
+                                        <button class="btn btn-outline-info" onclick="confirmUpdateStatus(${o.id}, 'ready')">
+                                            <i class="fas fa-check-circle me-1"></i> Ready
+                                        </button>
+                                    ` : ''}
+                                    
+                                    ${(o.status === 'ready' || o.status === 'delivered') ? `
+                                        <button class="btn btn-outline-success" onclick="confirmUpdateStatus(${o.id}, 'delivered')">
+                                            <i class="fas fa-truck me-1"></i> Delivered
+                                        </button>
+                                    ` : ''}
+                                    
+                                    <!-- NEW: Redo Order Button - only shows after delivered -->
+                                    ${o.status === 'delivered' ? `
+                                        <button class="btn btn-outline-warning" onclick="redoOrder(${o.id})">
+                                            <i class="fas fa-redo me-1"></i> Redo Order
+                                        </button>
+                                    ` : ''}
+                                    
+                                    ${o.status !== 'cancelled' && o.status !== 'delivered' ? `
+                                        <button class="btn btn-outline-danger" onclick="cancelOrderWithRefund(${o.id})">
+                                            <i class="fas fa-times me-1"></i> Cancel Order
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewReceipt(${o.id})">
+                                    <i class="fas fa-receipt me-1"></i> View Receipt
+                                </button>
+                                <button class="btn btn-sm btn-outline-info" onclick="showMessageModal(${o.id})">
+                                    <i class="fas fa-comments me-1"></i> Message
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" onclick="showUserDetails(${o.id})">
+                                    <i class="fas fa-user me-1"></i> User Details
+                                </button>
+                                ${o.status === 'ready' ? `
+                                    <button class="btn btn-sm btn-success" onclick="showFollowUpModal(${o.id})">
+                                        <i class="fas fa-bell me-1"></i> Follow Up
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('ordersList').innerHTML = html;
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // CHANGE THE DELIVERED BUTTON LOGIC
+        async function confirmUpdateStatus(orderId, status) {
+            const statusText = status.replace('_', ' ').toLowerCase();
+            const confirmMessage = `Do you want to change the status to ${statusText}?`;
+            
+            if (confirm(confirmMessage)) {
+                // Use the new deliver endpoint for delivered status
+                if (status === 'delivered') {
+                    await markOrderDelivered(orderId);
+                } else {
+                    await updateOrderStatus(orderId, status);
+                }
+            }
+        }
+
+        // NEW FUNCTION FOR DELIVERING ORDERS
+        async function markOrderDelivered(orderId) {
+            try {
+                console.log(`🔄 Marking order ${orderId} as delivered`);
+                
+                await apiCall(`${API_BASE}/orders/${orderId}/deliver`, {
+                    method: 'POST'
+                });
+
+                showToast(`Order marked as delivered!`, 'success');
+                loadOrders();
+                loadDashboard();
+                
+            } catch (err) {
+                console.error('❌ Failed to mark order as delivered:', err);
+                showToast('Failed to mark order as delivered: ' + err.message, 'error');
+            }
+        }
+        
+        // NEW: Redo order function
+        async function redoOrder(orderId) {
+            if (!confirm('Redo this order? This will move it back to In Process status.')) return;
+
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: 'in_process' })
+                });
+
+                showToast('Order moved back to In Process!', 'success');
+                loadOrders();
+                loadDashboard();
+            } catch (err) {
+                showToast('Failed to redo order', 'error');
+            }
+        }
+
+        // NEW: Confirm status reversion
+        async function confirmStatusRevert(orderId, oldStatus, newStatus) {
+            const oldStatusText = oldStatus.replace('_', ' ').toLowerCase();
+            const newStatusText = newStatus.replace('_', ' ').toLowerCase();
+            const confirmMessage = `Are you sure you want to revert status from ${oldStatusText} to ${newStatusText}?`;
+            
+            if (confirm(confirmMessage)) {
+                await updateOrderStatus(orderId, newStatus);
+            }
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            try {
+                console.log(`🔄 Updating order ${orderId} status to: ${status}`);
+                
+                // FIX: Remove JSON.stringify
+                await apiCall(`${API_BASE}/orders/${orderId}`, {
+                    method: 'PUT',
+                    body: { status }  // REMOVED JSON.stringify
+                });
+
+                showToast(`Order status updated to ${status.replace('_', ' ')}!`, 'success');
+                loadOrders();
+                loadDashboard();
+                
+                // Send automatic notification when order is marked as ready
+                if (status === 'ready') {
+                    await sendReadyNotification(orderId);
+                }
+                
+                // If marking as delivered, trigger delivery confirmation
+                if (status === 'delivered') {
+                    await triggerDeliveryConfirmation(orderId);
+                }
+            } catch (err) {
+                console.error('❌ Failed to update order status:', err);
+                showToast('Failed to update order status: ' + err.message, 'error');
+            }
+        }
+        // NEW: Comprehensive order cancellation with refund proof
+        async function cancelOrderWithRefund(orderId) {
+            try {
+                // Get order details first
+                const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+                const isOnlinePayment = order.payment_method && 
+                                        (order.payment_method === 'gcash' || order.payment_method === 'paymaya');
+                
+                // Create cancellation modal dynamically
+                const modalHtml = `
+                    <div class="modal fade" id="cancelOrderModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-warning">Cancel Order #${orderId}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Cancellation Reason *</label>
+                                        <textarea class="form-control" id="cancelReason" rows="3" placeholder="Explain why this order is being cancelled..." required></textarea>
+                                    </div>
+                                    ${isOnlinePayment ? `
+                                    <div class="mb-3">
+                                        <label class="form-label">Proof of Refund (Optional)</label> <!-- ✅ CHANGED TO OPTIONAL -->
+                                        <div class="file-upload-container" id="refundUploadContainer" onclick="document.getElementById('refundProof').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-2x text-warning mb-2"></i>
+                                            <p class="mb-1">Upload proof of refund (optional)</p> <!-- ✅ CHANGED TO OPTIONAL -->
+                                            <small class="text-muted">PNG, JPG up to 5MB</small>
+                                            <input type="file" id="refundProof" accept="image/*" style="display: none" onchange="handleRefundProofUpload(this.files)">
+                                        </div>
+                                        <div class="upload-preview-container mt-2">
+                                            <img id="refundPreview" class="upload-preview">
+                                        </div>
+                                        <!-- ✅ REMOVED required class and error message -->
+                                    </div>
+                                    ` : ''}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger" onclick="processOrderCancellation(${orderId}, ${isOnlinePayment})">Confirm Cancellation</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Remove existing modal if any
+                const existingModal = document.getElementById('cancelOrderModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+                
+                // Add modal to DOM
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                
+                // Show modal
+                const cancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+                cancelModal.show();
+                
+            } catch (err) {
+                console.error('❌ Failed to load order details:', err);
+                showToast('Failed to load order details: ' + err.message, 'error');
+            }
+        }
+
+        // Helper function for refund proof upload
+        function handleRefundProofUpload(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            const maxSize = 5 * 1024 * 1024;
+            
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select a valid image file', 'error');
+                return;
+            }
+            
+            if (file.size > maxSize) {
+                showToast('Image size must be less than 5MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('refundPreview');
+                const container = document.getElementById('refundUploadContainer');
+                
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                container.classList.remove('required');
+                document.getElementById('refundProofError').style.display = 'none';
+                
+                // Add remove button
+                const previewContainer = preview.parentNode;
+                if (!previewContainer.querySelector('.remove-image-btn')) {
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-image-btn';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.onclick = function() {
+                        preview.style.display = 'none';
+                        document.getElementById('refundProof').value = '';
+                        removeBtn.remove();
+                        document.getElementById('refundUploadContainer').classList.add('required');
+                    };
+                    previewContainer.appendChild(removeBtn);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Process the actual cancellation
+        async function processOrderCancellation(orderId, isOnlinePayment) {
+            const reason = document.getElementById('cancelReason').value.trim();
+            const refundProofFile = document.getElementById('refundProof')?.files[0];
+            
+            if (!reason) {
+                showToast('Please provide a cancellation reason', 'error');
+                return;
+            }
+            
+            // ✅ REMOVED: No longer require proof for online payments
+            // if (isOnlinePayment && !refundProofFile) {
+            //     document.getElementById('refundProofError').style.display = 'block';
+            //     showToast('Proof of refund is required for online payments', 'error');
+            //     return;
+            // }
+            
+            try {
+                let refundProofUrl = null;
+                
+                // Upload refund proof if provided (optional)
+                if (refundProofFile) {
+                    const formData = new FormData();
+                    formData.append('image', refundProofFile);
+                    
+                    const uploadResponse = await fetch(`${API_BASE}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+                    
+                    if (uploadResponse.ok) {
+                        const uploadResult = await uploadResponse.json();
+                        refundProofUrl = uploadResult.image_url;
+                    }
+                }
+                
+                // Update order status to cancelled
+                await apiCall(`${API_BASE}/orders/${orderId}`, {
+                    method: 'PUT',
+                    body: { status: 'cancelled' }
+                });
+                
+                // Send cancellation message to client
+                let messageContent = `Your order #${orderId} has been cancelled. Reason: ${reason}`;
+                if (refundProofUrl) {
+                    messageContent += ` [IMAGE] Proof of refund has been provided.`;
+                }
+                
+                await apiCall(`${API_BASE}/orders/${orderId}/messages`, {
+                    method: 'POST',
+                    body: {
+                        content: messageContent,
+                        sender: 'admin',
+                        image_url: refundProofUrl
+                    }
+                });
+                
+                // Close modal
+                const cancelModal = bootstrap.Modal.getInstance(document.getElementById('cancelOrderModal'));
+                cancelModal.hide();
+                
+                showToast('Order cancelled and client notified', 'success');
+                loadOrders();
+                
+            } catch (err) {
+                console.error('❌ Cancellation failed:', err);
+                showToast('Failed to cancel order: ' + err.message, 'error');
+            }
+        }        
+        // NEW: Cancel order function
+        async function cancelOrder(orderId) {
+            if (!confirm('Are you sure you want to cancel this order?')) return;
+
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: 'cancelled' })
+                });
+
+                showToast('Order cancelled!', 'success');
+                loadOrders();
+                loadDashboard();
+                
+                // Notify customer
+                createNotification(
+                    orderId,
+                    `Order #${orderId} has been cancelled.`
+                );
+            } catch (err) {
+                showToast('Failed to cancel order', 'error');
+            }
+        }
+
+        async function sendReadyNotification(orderId) {
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}/notify-ready`, {
+                    method: 'POST'
+                });
+                showToast('Ready notification sent to customer!', 'success');
+            } catch (err) {
+                console.log('Could not send ready notification');
+            }
+        }
+
+        async function approveOrder(orderId) {
+            try {
+                console.log(`🔄 Approving order ${orderId}`);
+                
+                await apiCall(`${API_BASE}/orders/${orderId}/approve`, {
+                    method: 'PUT'
+                });
+
+                showToast('Order approved successfully!', 'success');
+                loadOrders();
+                loadDashboard();
+                
+                // Force refresh notifications
+                setTimeout(() => {
+                    loadNotifications();
+                    updateNavNotificationBadge();
+                }, 1000);
+                
+            } catch (err) {
+                console.error('Failed to approve order:', err);
+                showToast(err.message || 'Failed to approve order', 'error');
+            }
+        }
+
+        async function triggerDeliveryConfirmation(orderId) {
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}/deliver`, {
+                    method: 'POST'
+                });
+                showToast('Delivery confirmation sent to customer!', 'success');
+            } catch (err) {
+                console.log('Could not trigger delivery confirmation');
+            }
+        }
+
+        async function requestRating(orderId) {
+            try {
+                await apiCall(`${API_BASE}/orders/${orderId}/request-rating`, {
+                    method: 'POST'
+                });
+                showToast('Rating request sent to customer!', 'success');
+            } catch (err) {
+                console.log('Could not send rating request');
+            }
+        }
+
+        // ============ FIXED MESSAGE SYSTEM ============
+        async function showMessageModal(orderId) {
+            currentMessageOrder = orderId;
+            document.getElementById('messageOrderId').textContent = `Order #${orderId}`;
+            await loadMessages(orderId);
+            
+            const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            messageModal.show();
+        }
+
+
+        async function loadMessages(orderId) {
+            try {
+                const messages = await apiCall(`${API_BASE}/orders/${orderId}/messages`);
+                
+                const container = document.getElementById('messageContainer');
+                container.innerHTML = '';
+                
+                if (messages.length === 0) {
+                    container.innerHTML = '<p class="text-muted text-center">No messages yet. Start a conversation!</p>';
+                    return;
+                }
+                
+                messages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${msg.sender === 'admin' ? 'admin' : 'client'}`;
+                    
+                    // Check if message contains image
+                    const hasImage = msg.content.includes('[IMAGE]');
+                    const content = hasImage ? msg.content.replace('[IMAGE]', '') : msg.content;
+                    
+                    messageDiv.innerHTML = `
+                        <div class="message-sender">${msg.sender === 'admin' ? 'Admin' : 'Customer'}</div>
+                        ${hasImage ? `<img src="${msg.image_url}" class="img-fluid rounded mb-2" style="max-width: 200px;" alt="Attached image">` : ''}
+                        <div>${content}</div>
+                        <div class="message-time">${msg.timestamp}</div>
+                    `;
+                    container.appendChild(messageDiv);
+                });
+                
+                container.scrollTop = container.scrollHeight;
+            } catch (err) {
+                console.log('Could not load messages');
+            }
+        }
+
+        async function sendMessage() {
+            const message = document.getElementById('newMessage').value.trim();
+            const imageFile = document.getElementById('messageImage').files[0];
+            
+            if (!message && !imageFile) {
+                showToast('Please enter a message or select an image', 'error');
+                return;
+            }
+
+            try {
+                let imageUrl = null;
+                if (imageFile) {
+                    console.log('📤 Uploading message image...');
+                    const formData = new FormData();
+                    formData.append('image', imageFile);
+                    
+                    const response = await fetch(`${API_BASE}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Image upload failed');
+                    }
+                    
+                    const result = await response.json();
+                    imageUrl = result.image_url;
+                    console.log('✅ Image uploaded:', imageUrl);
+                }
+
+                // ✅ FIXED: Use properly initialized currentUser
+                const sender = 'admin'; // Since this is admin.html, we're always admin
+                
+                const messageData = {
+                    content: imageUrl ? `[IMAGE] ${message}` : message,
+                    sender: sender,
+                    image_url: imageUrl
+                };
+
+                console.log('📨 Admin sending message:', messageData);
+                
+                await apiCall(`${API_BASE}/orders/${currentMessageOrder}/messages`, {
+                    method: 'POST',
+                    body: messageData
+                });
+
+                // Clear form
+                document.getElementById('newMessage').value = '';
+                document.getElementById('messageImage').value = '';
+                
+                // Reload messages
+                await loadMessages(currentMessageOrder);
+                showToast('Message sent successfully!', 'success');
+                
+            } catch (err) {
+                console.error('❌ Failed to send message:', err);
+                showToast('Failed to send message: ' + err.message, 'error');
+            }
+        }
+
+        // ============ USER DETAILS FUNCTION ============
+        async function showUserDetails(orderId) {
+            try {
+                const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+                const user = await apiCall(`${API_BASE}/users/${order.user_id}`);
+                
+                // Get user's order history
+                const userOrders = await apiCall(`${API_BASE}/orders`);
+                const userOrderHistory = userOrders.filter(o => o.user_id === order.user_id);
+                const completedOrders = userOrderHistory.filter(o => o.status === 'delivered').length;
+                const totalOrders = userOrderHistory.length;
+                
+                const userDetailsHtml = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-warning">Personal Information</h6>
+                            <p><strong>Name:</strong> ${user.name}</p>
+                            <p><strong>Username:</strong> ${user.username}</p>
+                            <p><strong>Phone:</strong> ${user.phone}</p>
+                            <p><strong>Member Since:</strong> ${new Date(user.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-warning">Order Statistics</h6>
+                            <p><strong>Total Orders:</strong> ${totalOrders}</p>
+                            <p><strong>Completed Orders:</strong> ${completedOrders}</p>
+                            <p><strong>Completion Rate:</strong> ${totalOrders > 0 ? Math.round((completedOrders / totalOrders) * 100) : 0}%</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h6 class="text-warning">Recent Orders</h6>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${userOrderHistory.slice(0, 5).map(order => `
+                                        <tr>
+                                            <td>#${order.id}</td>
+                                            <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                                            <td><span class="status-badge status-${order.status.replace('_', '')}">${order.status.replace('_', ' ').toUpperCase()}</span></td>
+                                            <td>₱${order.total_price.toFixed(2)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('userDetailsContent').innerHTML = userDetailsHtml;
+                new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+            } catch (err) {
+                showToast('Failed to load user details', 'error');
+            }
+        }
+        // ============ NOTIFICATION BADGE FUNCTIONS ============
+        function updateNotificationBadges() {
+            updateOrderNotificationBadge();
+            updateNavNotificationBadge();
+        }
+
+        async function updateOrderNotificationBadge() {
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                const waitingCount = orders.filter(o => o.status === 'waiting_approval').length;
+                const unreadNotifications = await getUnreadNotificationsCount();
+                
+                // Update order status badges
+                document.getElementById('waitingCount').textContent = waitingCount;
+                document.getElementById('ordersWaitingCount').textContent = waitingCount;
+                
+                // Update nav badge
+                document.getElementById('navNotificationBadge').textContent = unreadNotifications;
+                document.getElementById('navNotificationBadge').style.display = unreadNotifications > 0 ? 'flex' : 'none';
+                
+            } catch (err) {
+                console.log('Could not update notification badges');
+            }
+        }
+
+        async function getUnreadNotificationsCount() {
+            try {
+                const notifications = await apiCall(`${API_BASE}/notifications`);
+                return notifications.filter(n => !n.is_read).length;
+            } catch (err) {
+                return 0;
+            }
+        }
+
+        // ADD these notification badge functions
+        function updateNotificationBadges() {
+            updateOrderNotificationBadge();
+            updateNavNotificationBadge();
+        }
+
+        async function updateOrderNotificationBadge() {
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                const waitingCount = orders.filter(o => o.status === 'waiting_approval').length;
+                
+                // Update order status badges
+                const waitingEl = document.getElementById('waitingCount');
+                const ordersWaitingEl = document.getElementById('ordersWaitingCount');
+                
+                if (waitingEl) waitingEl.textContent = waitingCount;
+                if (ordersWaitingEl) ordersWaitingEl.textContent = waitingCount;
+                
+            } catch (err) {
+                console.log('Could not update order notification badges');
+            }
+        }
+
+        async function updateNavNotificationBadge() {
+            try {
+                const unreadNotifications = await getUnreadNotificationsCount();
+                const badge = document.getElementById('adminNotificationBadge');
+                
+                if (badge) {
+                    badge.textContent = unreadNotifications;
+                    badge.style.display = unreadNotifications > 0 ? 'flex' : 'none';
+                }
+            } catch (err) {
+                console.log('Could not update nav notification badge');
+            }
+        }
+
+        async function getUnreadNotificationsCount() {
+            try {
+                const notifications = await apiCall(`${API_BASE}/notifications`);
+                return notifications.filter(n => !n.is_read).length;
+            } catch (err) {
+                return 0;
+            }
+        }
+        // ============ RECEIPT FUNCTIONALITY ============
+        async function viewReceipt(orderId) {
+            try {
+                const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+                
+                // Calculate delivery fee based on order type
+                const deliveryFee = order.order_type === 'delivery' ? 49 : 0;
+                const totalWithDelivery = order.total_price + deliveryFee;
+                
+                const receiptHtml = `
+                    <div class="receipt-container">
+                        <div class="receipt-header">
+                            <h4 class="fw-bold">KAINMAMI</h4>
+                            <p class="mb-1">Order Receipt</p>
+                            <small>Order #${order.id}</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Customer:</strong> ${order.user_name}</p>
+                            <p class="mb-1"><strong>Date:</strong> ${order.created_at}</p>
+                            <p class="mb-1"><strong>Status:</strong> ${order.status.toUpperCase().replace('_', ' ')}</p>
+                            <p class="mb-1"><strong>Order Type:</strong> ${order.order_type === 'delivery' ? 'Delivery' : 'Self Pickup'}</p>
+                            ${order.order_type === 'delivery' ? `<p class="mb-1"><strong>Delivery Address:</strong> ${order.delivery_address}</p>` : ''}
+                        </div>
+                        
+                        ${order.special_instructions ? `
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Special Instructions:</h6>
+                            <p class="p-2 bg-light rounded">${order.special_instructions}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${order.payment_method === 'cash' ? `
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Payment Details:</h6>
+                            <p class="mb-1"><strong>Method:</strong> CASH</p>
+                            <p class="mb-1"><strong>Payment Status:</strong> 
+                                ${order.status === 'delivered' ? 'Paid' : 'Pending'}
+                            </p>
+                        </div>
+                        ` : ''}
+                        
+                        ${order.payment_details ? `
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Payment Details:</h6>
+                            <p class="mb-1"><strong>Method:</strong> ${order.payment_method.toUpperCase()}</p>
+                            <p class="mb-1"><strong>Account Name:</strong> ${order.payment_details.account_name}</p>
+                            <p class="mb-1"><strong>Account Number:</strong> ${order.payment_details.account_number}</p>
+                            <p class="mb-1"><strong>Reference No:</strong> ${order.payment_details.reference_number}</p>
+                            ${order.proof_image ? `
+                                <p class="mb-1"><strong>Proof of Payment:</strong></p>
+                                <img src="${order.proof_image}" class="proof-image" alt="Proof of Payment">
+                            ` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        <div class="receipt-items mb-3">
+                            <h6 class="fw-bold">Items Ordered:</h6>
+                            ${order.items.map(item => `
+                                <div class="receipt-item">
+                                    <span>${item.name} x${item.quantity}</span>
+                                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="receipt-total">
+                            <div class="receipt-item">
+                                <span>Subtotal:</span>
+                                <span>₱${order.total_price.toFixed(2)}</span>
+                            </div>
+                            <div class="receipt-item">
+                                <span>Delivery Fee:</span>
+                                <span>${order.order_type === 'delivery' ? '₱49.00' : '₱0.00'}</span>
+                            </div>
+                            <div class="receipt-item">
+                                <strong>Total:</strong>
+                                <strong>₱${totalWithDelivery.toFixed(2)}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3 text-center">
+                            <small class="text-muted">Thank you for your order!</small>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('receiptContent').innerHTML = receiptHtml;
+                receiptModal.show();
+            } catch (err) {
+                showToast('Could not load receipt', 'error');
+            }
+        }
+
+        function printReceipt() {
+            const receiptContent = document.getElementById('receiptContent').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Receipt - KainMami</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            .receipt-container { max-width: 300px; margin: 0 auto; }
+                            .receipt-header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 15px; margin-bottom: 15px; }
+                            .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                            .receipt-total { border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+                            .proof-image { max-width: 200px; max-height: 200px; }
+                        </style>
+                    </head>
+                    <body>
+                        ${receiptContent}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // ============ NOTIFICATION SYSTEM ============
+        async function loadNotifications() {
+            try {
+                const notifications = await apiCall(`${API_BASE}/notifications`);
+                
+                if (currentPage === 'notifications') {
+                    let notificationsHtml = '';
+                    
+                    // Client ready notifications
+                    const clientReadyNotifications = notifications.filter(n => 
+                        n.message.includes('Client ready for pickup') && !n.is_read
+                    );
+                    
+                    if (clientReadyNotifications.length > 0) {
+                        notificationsHtml += `
+                            <div class="mb-4">
+                                <h6 class="text-warning mb-3">Client Ready for Pickup</h6>
+                                ${clientReadyNotifications.map(n => `
+                                    <div class="client-ready-notification">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="fw-bold">${n.message}</h6>
+                                                <small class="notification-time">${n.created_at}</small>
+                                            </div>
+                                            <button class="btn btn-sm btn-success" onclick="markNotificationRead(${n.id})">
+                                                <i class="fas fa-check me-1"></i> Mark Read
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    // Regular notifications
+                    const regularNotifications = notifications.filter(n => 
+                        !n.message.includes('Client ready for pickup')
+                    );
+                    
+                    if (regularNotifications.length > 0) {
+                        notificationsHtml += `
+                            <h6 class="text-warning mb-3">System Notifications</h6>
+                            ${regularNotifications.map(n => `
+                                <div class="notification-item ${n.is_read ? 'opacity-75' : ''}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="fw-bold">${n.message}</h6>
+                                            <small class="notification-time">${n.created_at}</small>
+                                        </div>
+                                        ${!n.is_read ? `
+                                            <button class="btn btn-sm btn-outline-warning" onclick="markNotificationRead(${n.id})">
+                                                <i class="fas fa-check me-1"></i> Mark Read
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        `;
+                    }
+                    
+                    if (notifications.length === 0) {
+                        notificationsHtml = '<p class="text-muted">No notifications</p>';
+                    }
+                    
+                    document.getElementById('notificationsList').innerHTML = notificationsHtml;
+                }
+                
+            } catch (err) {
+                console.log('Could not load notifications');
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            try {
+                const result = await apiCall(`${API_BASE}/notifications/mark-all-read`, {
+                    method: 'PUT'
+                });
+                
+                showToast(`All notifications marked as read (${result.updated_count || 0} updated)`, 'success');
+                loadNotifications();
+                updateNavNotificationBadge();
+            } catch (err) {
+                console.error('Failed to mark all notifications:', err);
+                showToast('Failed to mark all notifications as read', 'error');
+            }
+        }
+
+        async function markNotificationRead(notificationId) {
+            try {
+                await apiCall(`${API_BASE}/notifications/${notificationId}/read`, {
+                    method: 'PUT'
+                });
+                
+                showToast('Notification marked as read', 'success');
+                loadNotifications();
+                updateNavNotificationBadge();
+            } catch (err) {
+                console.error('Failed to mark notification:', err);
+                showToast('Failed to mark notification as read', 'error');
+            }
+        }
+
+        async function sendReadyNotifications() {
+            try {
+                const orders = await apiCall(`${API_BASE}/orders`);
+                const readyOrders = orders.filter(o => o.status === 'ready');
+                
+                for (const order of readyOrders) {
+                    await sendReadyNotification(order.id);
+                }
+                
+                showToast(`Notifications sent to ${readyOrders.length} customers`, 'success');
+                loadNotifications();
+            } catch (err) {
+                showToast('Failed to send notifications', 'error');
+            }
+        }
+
+        async function showFollowUpModal(orderId) {
+            try {
+                const order = await apiCall(`${API_BASE}/orders/${orderId}`);
+                currentFollowUpOrder = order;
+                
+                document.getElementById('followUpCustomer').value = `${order.user_name} (Order #${order.id})`;
+                document.getElementById('followUpOrderType').value = order.order_type === 'delivery' ? 'Delivery' : 'Self Pickup';
+                document.getElementById('followUpMessage').value = 'custom';
+                document.getElementById('customMessageContainer').style.display = 'block';
+                
+                let defaultMessage = '';
+                if (order.status === 'ready') {
+                    if (order.order_type === 'delivery') {
+                        defaultMessage = 'Your order is about to be delivered! Please be ready to receive your order.';
+                    } else {
+                        defaultMessage = 'Your order is ready for pickup! Please come to the store to collect your order.';
+                    }
+                } else if (order.status === 'delivered') {
+                    defaultMessage = "Just checking if you've received your order. Please confirm delivery.";
+                }
+                
+                document.getElementById('customMessage').value = defaultMessage;
+                followUpModal.show();
+            } catch (err) {
+                showToast('Could not load order details', 'error');
+            }
+        }
+
+        async function sendFollowUp() {
+            if (!currentFollowUpOrder) return;
+            
+            const messageSelect = document.getElementById('followUpMessage');
+            let message = messageSelect.value;
+            
+            if (message === 'custom') {
+                message = document.getElementById('customMessage').value;
+            }
+            
+            if (!message.trim()) {
+                showToast('Please enter a message', 'error');
+                return;
+            }
+            
+            try {
+                await apiCall(`${API_BASE}/orders/${currentFollowUpOrder.id}/follow-up`, {
+                    method: 'POST',
+                    body: JSON.stringify({ message })
+                });
+                
+                showToast('Message sent to customer!', 'success');
+                followUpModal.hide();
+            } catch (err) {
+                showToast('Failed to send message', 'error');
+            }
+        }
+
+        // ============ ANALYTICS ============
+        async function loadAnalytics() {
+            showLoading(true);
+            try {
+                const period = document.getElementById('analyticsPeriod').value;
+                const analytics = await apiCall(`${API_BASE}/analytics?period=${period}`);
+                
+                document.getElementById('totalRevenue').textContent = `₱${analytics.total_revenue.toFixed(2)}`;
+                document.getElementById('totalSales').textContent = analytics.total_orders;
+                document.getElementById('popularItem').textContent = analytics.popular_item || '-';
+                
+                // ✅ ADD THIS LINE: Load ratings when analytics page opens
+                await loadRatings();
+                
+                const topItemsHtml = analytics.top_items.map(item => `
+                    <div class="card product-card mb-2">
+                        <div class="card-body py-2">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <h6 class="mb-0">${item.name}</h6>
+                                    <small class="text-muted">${item.category}</small>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <span class="fw-bold">${item.quantity_sold}</span>
+                                    <small class="text-muted d-block">sold</small>
+                                </div>
+                                <div class="col-3 text-end">
+                                    <span class="text-warning fw-bold">₱${item.revenue.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('topItemsList').innerHTML = topItemsHtml || '<p class="text-muted">No sales data available</p>';
+                
+            } catch (err) {
+                document.getElementById('topItemsList').innerHTML = '<p class="text-muted">Analytics data not available</p>';
+            } finally {
+                showLoading(false);
+            }
+        }
+        // ============ ACCOUNT ============
+        async function loadAccount() {
+            showLoading(true);
+            try {
+                const user = await apiCall(`${API_BASE}/account`);
+
+                document.getElementById('accountUsername').value = user.username;
+                document.getElementById('accountName').value = user.name;
+                document.getElementById('accountPhone').value = user.phone;
+            } catch (err) {
+                // Error handled by apiCall
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        document.getElementById('accountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const accountData = {
+                name: document.getElementById('accountName').value,
+                phone: document.getElementById('accountPhone').value
+            };
+
+            const password = document.getElementById('accountPassword').value;
+            if (password) {
+                accountData.password = password;
+            }
+
+            try {
+                await apiCall(`${API_BASE}/account`, {
+                    method: 'PUT',
+                    body: JSON.stringify(accountData)
+                });
+
+                showToast('Account updated successfully', 'success');
+                document.getElementById('accountPassword').value = '';
+            } catch (err) {
+                // Error handled by apiCall
+            }
+        });
+
+        // ============ TOAST NOTIFICATIONS ============
+        function showToast(message, type) {
+            const toastClass = type === 'success' ? 'toast-success' : 
+                             type === 'error' ? 'toast-error' : 
+                             type === 'warning' ? 'toast-warning' : 'toast-info';
+            
+            const toastHtml = `
+                <div class="toast align-items-center text-white border-0 position-fixed bottom-0 end-0 m-3 ${toastClass}" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body" style="color: #000000 !important;">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', toastHtml);
+            const toastEl = document.querySelector('.toast:last-child');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            setTimeout(() => toastEl.remove(), 3000);
+        }
+
+        // ============ OPTIMIZED AUTO-REFRESH ============
+        let refreshIntervals = {
+            orders: 120000,    // 2 minutes for orders
+            notifications: 60000, // 1 minute for notifications  
+            dashboard: 300000, // 5 minutes for dashboard
+            home: 300000       // 5 minutes for home
+        };
+
+        let lastRefresh = {
+            orders: 0,
+            notifications: 0,
+            dashboard: 0,
+            home: 0
+        };
+
+        function startOptimizedAutoRefresh() {
+            setInterval(() => {
+                const now = Date.now();
+                
+                // Only refresh if page is visible
+                if (document.visibilityState === 'visible') {
+                    
+                    // Refresh notifications more frequently
+                    if (now - lastRefresh.notifications > refreshIntervals.notifications) {
+                        loadNotifications();
+                        updateNotificationBadges();
+                        lastRefresh.notifications = now;
+                    }
+                    
+                    // Page-specific refreshes
+                    if (currentPage === 'orders' && now - lastRefresh.orders > refreshIntervals.orders) {
+                        loadOrders();
+                        lastRefresh.orders = now;
+                    }
+                    else if ((currentPage === 'home' || currentPage === 'dashboard') && 
+                            now - lastRefresh.dashboard > refreshIntervals.dashboard) {
+                        if (currentPage === 'home') loadHome();
+                        if (currentPage === 'dashboard') loadDashboard();
+                        lastRefresh.dashboard = now;
+                    }
+                }
+            }, 30000); // Check every 30 seconds, but only refresh if interval passed
+        }
+
+        // Start optimized auto-refresh when admin logs in
+        setTimeout(startOptimizedAutoRefresh, 5000);
+    </script>
+</body>
+</html>
