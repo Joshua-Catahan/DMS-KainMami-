@@ -155,12 +155,12 @@ def validate_json_request():
 
 @app.before_request
 def before_request():
-    """Run before each request - FIXED VERSION"""
+    """Enhanced request validation"""
     # Skip validation for specific endpoints
     if request.endpoint in ['upload_image', 'serve_uploaded_file', 'static']:
         return None
         
-    # Enhanced JSON validation
+    # Enhanced JSON validation with better error messages
     if request.method in ['POST', 'PUT', 'PATCH'] and request.content_length:
         content_type = request.headers.get('Content-Type', '')
         
@@ -173,7 +173,7 @@ def before_request():
                 logger.error(f"JSON parsing error: {str(e)}")
                 return jsonify({
                     'message': 'Invalid JSON data in request body',
-                    'error': 'Please check your request format'
+                    'error': 'Please check your request format. Make sure you are not double-stringifying JSON.'
                 }), 400
     
     return None

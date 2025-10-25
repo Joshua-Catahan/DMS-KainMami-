@@ -3877,19 +3877,14 @@
                 phone: phone
             };
 
-            // Validate password if provided
             if (password) {
-                if (!validatePasswordStrength(password, 'account')) {
-                    showToast('Please meet all password requirements', 'error');
-                    return;
-                }
                 data.password = password;
             }
 
             try {
                 await apiCall(`${API_BASE}/account`, {
                     method: 'PUT',
-                    body: JSON.stringify(data)
+                    body: data 
                 });
 
                 showToast('Account updated successfully', 'success');

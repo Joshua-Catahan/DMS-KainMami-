@@ -2249,7 +2249,7 @@
                 paymentMethods[method] = enabled;
                 await apiCall(`${API_BASE}/payment-methods`, {
                     method: 'PUT',
-                    body: JSON.stringify({ [method]: enabled })
+                    body: { [method]: enabled } 
                 });
                 showToast(`${method.toUpperCase()} ${enabled ? 'enabled' : 'disabled'}`, 'success');
             } catch (err) {
@@ -2280,7 +2280,7 @@
                 orderTypes[type] = enabled;
                 await apiCall(`${API_BASE}/order-types`, {
                     method: 'PUT',
-                    body: JSON.stringify({ [type]: enabled })
+                    body: { [type]: enabled } // ✅ CORRECT - Remove JSON.stringify
                 });
                 showToast(`${type === 'delivery' ? 'Delivery' : 'Pickup'} ${enabled ? 'enabled' : 'disabled'}`, 'success');
                 
@@ -3242,7 +3242,7 @@
             try {
                 await apiCall(`${API_BASE}/foods/${foodId}/availability`, {
                     method: 'PUT',
-                    body: JSON.stringify({ is_available: newStatus })
+                    body: { is_available: newStatus } // ✅ CORRECT - Remove JSON.stringify
                 });
 
                 showToast(`Food ${newStatus ? 'made available' : 'made unavailable'}!`, 'success');
@@ -4410,7 +4410,7 @@
             try {
                 await apiCall(`${API_BASE}/account`, {
                     method: 'PUT',
-                    body: JSON.stringify(accountData)
+                    body: accountData // ✅ CORRECT - Remove JSON.stringify
                 });
 
                 showToast('Account updated successfully', 'success');
@@ -4419,7 +4419,6 @@
                 // Error handled by apiCall
             }
         });
-
         // ============ TOAST NOTIFICATIONS ============
         function showToast(message, type) {
             const toastClass = type === 'success' ? 'toast-success' : 
